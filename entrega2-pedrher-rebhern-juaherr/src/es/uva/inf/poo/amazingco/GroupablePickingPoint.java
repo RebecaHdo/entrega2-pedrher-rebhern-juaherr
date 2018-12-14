@@ -26,13 +26,7 @@ public abstract class GroupablePickingPoint extends PickingPoint {
 	 */
 	public GroupablePickingPoint(String id, GPSCoordinate ubicacion,
 			LocalTime[][] horario, int numeroTaquillas) {
-		super(id, ubicacion, horario);
-		if (numeroTaquillas < 1) {
-			throw new IllegalArgumentException(
-					"Número de taquillas no positivo.");
-
-		}
-		setNumeroTaquillas(numeroTaquillas);
+		super(id, ubicacion, horario, numeroTaquillas);
 	}
 
 	/**
@@ -58,14 +52,7 @@ public abstract class GroupablePickingPoint extends PickingPoint {
 	 */
 	public GroupablePickingPoint(String id, GPSCoordinate ubicacion,
 			LocalTime[][] horario, int numeroTaquillas, boolean operativo) {
-		super(id, ubicacion, horario, operativo);
-		if (numeroTaquillas < 1) {
-			throw new IllegalArgumentException(
-					"Número de taquillas no positivo.");
-
-		}
-		setNumeroTaquillas(numeroTaquillas);
-
+		super(id, ubicacion, horario, numeroTaquillas, operativo);
 	}
 
 }

@@ -35,7 +35,7 @@ public abstract class PickingPoint {
 	 *                                  la hora de cierre.
 	 */
 	public PickingPoint(String id, GPSCoordinate ubicacion,
-			LocalTime[][] horario, boolean operativo) {
+			LocalTime[][] horario, int numeroTaquillas, boolean operativo) {
 
 		// Comprueba que los argumentos dados para la inicialización del
 		// PackageLocker
@@ -70,11 +70,16 @@ public abstract class PickingPoint {
 						"Horas mal introducidas. Debe ser Apertura → Cierre");
 			}
 		}
+		if (numeroTaquillas < 1) {
+			throw new IllegalArgumentException(
+					"Número de taquillas no positivo.");
 
+		}
 		this.id = id;
 		this.ubicacion = ubicacion;
 		this.horario = horario;
 		this.operativo = operativo;
+		this.numeroTaquillas = numeroTaquillas;
 	}
 
 	/**
@@ -94,8 +99,8 @@ public abstract class PickingPoint {
 	 *                                  la hora de cierre.
 	 */
 	public PickingPoint(String id, GPSCoordinate ubicacion,
-			LocalTime[][] horario) {
-		this(id, ubicacion, horario, true);
+			LocalTime[][] horario, int numeroTaquillas) {
+		this(id, ubicacion, horario, numeroTaquillas, true);
 	}
 
 	/**
@@ -109,11 +114,11 @@ public abstract class PickingPoint {
 
 	}
 
-	protected void setOperativo(boolean op) {
+	private void setOperativo(boolean op) {
 		operativo = op;
 	}
 
-	protected void setOcupadas(int numero) {
+	private void setOcupadas(int numero) {
 		ocupadas = numero;
 	}
 

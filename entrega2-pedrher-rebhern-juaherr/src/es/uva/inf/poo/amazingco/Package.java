@@ -230,7 +230,11 @@ public class Package {
 	public boolean getPagado() {
 		return pagado;
 	}
-
+	
+	protected void pagado() {
+		pagado = !pagado;
+	}
+	
 	/**
 	 * Añade un dni autorizado a el paquete certificado.
 	 * 
