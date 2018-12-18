@@ -2,6 +2,7 @@ package es.uva.inf.poo.amazingco;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import es.uva.inf.poo.maps.GPSCoordinate;
 
@@ -87,10 +88,12 @@ public class Kiosk extends GroupablePickingPoint {
 	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada) {
 		super.sacaPaquete(idTaquilla, fechaSacada);
 
-		Package paquete = getTaquillasInterno().get(idTaquilla);
+		Package paquete = getPaquetesInterno().get(idTaquilla);
 		if (!paquete.getPagado()) {
 			setDinero(getDinero() + paquete.getPrecio());
 			paquete.pagado();
 		}
 	}
+
+	
 }

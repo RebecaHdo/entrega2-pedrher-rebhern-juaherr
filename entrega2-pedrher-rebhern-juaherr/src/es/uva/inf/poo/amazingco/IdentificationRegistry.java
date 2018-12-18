@@ -33,7 +33,7 @@ public interface IdentificationRegistry {
 	 * @return garantiza que el resultado es {@code != null}
 	 * @throws IllegalArgumentException o AssertionError cuando {@code !isPackageRegistered(packageCode)}
 	 */
-	public LocalDate getPickupDateFor(String packgeCode);
+	public LocalDate getPickupDateFor(String packageCode);
 	
 	/**
 	 * Realiza el registro de la recogida certificada de un paquete 
@@ -43,7 +43,7 @@ public interface IdentificationRegistry {
 	 * @param pickupDate fecha en la que se produce la recogida, requiere {@code pickupDate != null} 
 	 * y pickupDate no es posterior a la fecha de vencimiento de la recogida
 	 * @throws IllegalArgumentException o AssertionError cuando {@code pickupDate != null} o cuando pickupDate 
-	 * no es posterior a la fecha de vencimiento de la recogida
+	 * es posterior a la fecha de vencimiento de la recogida
 	 */
 	public void registerCertifiedPackagePickup(Package p, String dni, LocalDate pickupDate);
 	

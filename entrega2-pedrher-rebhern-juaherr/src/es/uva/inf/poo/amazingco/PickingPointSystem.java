@@ -286,7 +286,7 @@ public class PickingPointSystem {
 			PickingPoint pickingPoint = getListaPickingPoint().get(i);
 			if (id == pickingPoint.getId()) {
 				for (int j = 0; j < pickingPoint.getNumeroTaquillas(); j++) {
-					if (pickingPoint.getTaquillas().get(j) != null) {
+					if (pickingPoint.getPaquetes().get(j) != null) {
 						throw new IllegalStateException(
 								"Todavia hay paquetes en el PickingPoint.");
 					}

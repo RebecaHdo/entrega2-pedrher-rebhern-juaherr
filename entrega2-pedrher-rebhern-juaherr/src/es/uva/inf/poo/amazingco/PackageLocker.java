@@ -38,4 +38,6 @@ public class PackageLocker extends GroupablePickingPoint {
 		super.asignaPaquete(paquete);
 
 	}
+
+	
 }

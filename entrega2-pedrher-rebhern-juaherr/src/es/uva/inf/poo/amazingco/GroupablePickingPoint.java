@@ -1,10 +1,14 @@
 package es.uva.inf.poo.amazingco;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import es.uva.inf.poo.maps.GPSCoordinate;
 
 public abstract class GroupablePickingPoint extends PickingPoint {
+
+	private ArrayList<Package> paquetes;
+
 	/**
 	 * Inicializa el GroupablePickingPoint operativo con la id, ubicación,
 	 * horario semanal y número de taquillas.
@@ -53,6 +57,18 @@ public abstract class GroupablePickingPoint extends PickingPoint {
 	public GroupablePickingPoint(String id, GPSCoordinate ubicacion,
 			LocalTime[][] horario, int numeroTaquillas, boolean operativo) {
 		super(id, ubicacion, horario, numeroTaquillas, operativo);
+	}
+
+	@Override
+	protected ArrayList<Package> getPaquetesInterno() {
+		return paquetes;
+	}
+
+	@Override
+	protected boolean borrable() {
+		ArrayList<Package> paq = getPaquetes();
+		return paq.isEmpty();
+
 	}
 
 }

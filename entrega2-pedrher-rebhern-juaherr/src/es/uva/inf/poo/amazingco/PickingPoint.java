@@ -3,6 +3,7 @@ package es.uva.inf.poo.amazingco;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import es.uva.inf.poo.maps.GPSCoordinate;
 
@@ -11,7 +12,6 @@ public abstract class PickingPoint {
 	private String id;
 	private GPSCoordinate ubicacion;
 	private LocalTime[][] horario;
-	private ArrayList<Package> paquetes;
 	private int numeroTaquillas;
 	private int ocupadas;
 	private boolean operativo;
@@ -60,15 +60,13 @@ public abstract class PickingPoint {
 
 			}
 			for (int j = 0; j < 2; j++) {
-				if (horario[i][j] == null) {
+				if (horario[i][j] == null
+						|| horario[i][0].isAfter(horario[i][1])) {
 					throw new IllegalArgumentException(
-							"Al menos una de las horas es null.");
+							"Horas mal introducidas.");
 				}
 			}
-			if (horario[i][0].isAfter(horario[i][1])) {
-				throw new IllegalArgumentException(
-						"Horas mal introducidas. Debe ser Apertura → Cierre");
-			}
+
 		}
 		if (numeroTaquillas < 1) {
 			throw new IllegalArgumentException(
@@ -127,17 +125,28 @@ public abstract class PickingPoint {
 	}
 
 	/**
+	 * Devuelve el número de taquillas totales.
+	 * 
+	 * @return número de taquillas totales.
+	 */
+	public int getNumeroTaquillas() {
+		return numeroTaquillas;
+	}
+
+	/**
 	 * Devuelve una copia de las taquillas del PackageLocker.
 	 * 
 	 * @return copia de taquillas del PackageLocker.
 	 */
-	public ArrayList<Package> getTaquillas() {
-		return new ArrayList<>(getTaquillasInterno());
-	}
-
-	protected ArrayList<Package> getTaquillasInterno() {
+	public ArrayList<Package> getPaquetes() {
+		ArrayList<Package> paquetes = new ArrayList<>(getPaquetesInterno());
+		paquetes.removeAll(Collections.singleton(null));
 		return paquetes;
 	}
+
+	protected abstract ArrayList<Package> getPaquetesInterno();
+
+	protected abstract boolean borrable();
 
 	/**
 	 * Devuelve la id del PackageLocker.
@@ -157,10 +166,6 @@ public abstract class PickingPoint {
 		LocalTime[][] devolver = new LocalTime[7][2];
 		System.arraycopy(horario, 0, devolver, 0, 7);
 		return devolver;
-	}
-
-	public int getNumeroTaquillas() {
-		return numeroTaquillas;
 	}
 
 	/**
@@ -201,8 +206,8 @@ public abstract class PickingPoint {
 
 	private int buscaPaquete(String idPaquete) {
 		int i = 0;
-		while (i < paquetes.size()) {
-			if (paquetes.get(i).getId() == idPaquete) {
+		while (i < getPaquetes().size()) {
+			if (getPaquetes().get(i).getId() == idPaquete) {
 				return i;
 			}
 			i++;
@@ -259,8 +264,8 @@ public abstract class PickingPoint {
 		// guarda el paquete en la primera taquilla libre.
 		int i = 0;
 		while (i < getNumeroTaquillas()) {
-			if (getTaquillasInterno().get(i) == null) { // TODO isEmpty?
-				getTaquillasInterno().set(i, paquete);
+			if (getPaquetesInterno().get(i) == null) {
+				getPaquetesInterno().set(i, paquete);
 				i = getNumeroTaquillas();
 			} else {
 				i++;
@@ -286,11 +291,11 @@ public abstract class PickingPoint {
 					"Número de taquilla erroneo. Debe estar comprendido entre 0 y numero de taquillas -1");
 		}
 
-		if (getTaquillasInterno().get(idTaquilla) == null) {
+		if (getPaquetesInterno().get(idTaquilla) == null) {
 			throw new IllegalStateException("Esta taquilla está vacía.");
 		}
 
-		return getTaquillasInterno().get(idTaquilla);
+		return getPaquetesInterno().get(idTaquilla);
 	}
 
 	/**
@@ -307,10 +312,10 @@ public abstract class PickingPoint {
 					"Número de taquilla erroneo. Debe estar comprendido entre 0 y numero de taquillas -1");
 		}
 
-		if (getTaquillasInterno().get(idTaquilla) == null) {
+		if (getPaquetesInterno().get(idTaquilla) == null) {
 			throw new IllegalStateException("Esta taquilla está vacía.");
 		}
-		getTaquillasInterno().set(idTaquilla, null);
+		getPaquetesInterno().set(idTaquilla, null);
 		setOcupadas(getNumeroTaquillasLlenas() - 1);
 
 	}
@@ -338,11 +343,11 @@ public abstract class PickingPoint {
 			throw new IllegalArgumentException("La fecha es nula.");
 
 		}
-		if (getTaquillasInterno().get(idTaquilla) == null) {
+		if (getPaquetesInterno().get(idTaquilla) == null) {
 			throw new IllegalStateException("Esta taquilla está vacía.");
 
 		}
-		getTaquillasInterno().get(idTaquilla).recogido(fechaSacada);
+		getPaquetesInterno().get(idTaquilla).recogido(fechaSacada);
 	}
 
 	/**
@@ -357,9 +362,9 @@ public abstract class PickingPoint {
 			throw new IllegalArgumentException(
 					"Número de taquilla erroneo. Debe estar comprendido entre 0 y numero de taquillas -1");
 		}
-		if (getTaquillasInterno().get(idTaquilla) == null) {
+		if (getPaquetesInterno().get(idTaquilla) == null) {
 			throw new IllegalStateException("Esta taquilla está vacía.");
 		}
-		getTaquillasInterno().get(idTaquilla).devuelto();
+		getPaquetesInterno().get(idTaquilla).devuelto();
 	}
 }
