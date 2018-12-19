@@ -154,6 +154,7 @@ public class Package {
 	public Package(String id, int precio, boolean pagado, String[] dni) {
 		this(id, precio, pagado);
 		this.certificado = true;
+		this.dni = new HashSet<>();
 		addDni(dni);
 	}
 
@@ -201,7 +202,6 @@ public class Package {
 
 	// Usar cuando se necesite el Set de dnis.
 	private HashSet<String> getDni() {
-		System.out.println("Getdni " +dni);
 		return dni;
 	}
 

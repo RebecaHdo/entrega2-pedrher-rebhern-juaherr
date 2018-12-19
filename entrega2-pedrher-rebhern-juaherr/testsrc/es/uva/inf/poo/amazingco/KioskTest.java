@@ -101,7 +101,20 @@ public class KioskTest {
 
 	@Test
 	public void testDineroAmazingCo() {
-		fail("Not yet implemented");
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) }, { LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) }, { LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) }, { LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2);
+		Package paquete0 = new Package("0000000000", 1, false);// paquete no pagado
+		Package paquete1 = new Package("0000000011", 2, false);// paquete no pagado
+
+		kiosk.asignaPaquete(paquete0);
+		kiosk.sacaPaquete(kiosk.locaclizaPaquete("0000000000"), LocalDate.now(), 0, LocalTime.of(8, 1));
+		kiosk.dineroAmazingCo();
+		assertEquals(0, kiosk.getDinero(), 0.01);
 	}
 
 	@Test
