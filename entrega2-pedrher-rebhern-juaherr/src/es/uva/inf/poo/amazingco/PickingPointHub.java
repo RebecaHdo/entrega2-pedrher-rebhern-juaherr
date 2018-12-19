@@ -2,7 +2,6 @@ package es.uva.inf.poo.amazingco;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import es.uva.inf.poo.maps.GPSCoordinate;
 
@@ -10,7 +9,7 @@ public class PickingPointHub extends PickingPoint {
 
 	ArrayList<GroupablePickingPoint> listaPuntos = new ArrayList<>();
 
-	int numPackageLockers = 0;
+	private int numPackageLockers = 0;
 
 	/**
 	 * 
@@ -35,12 +34,16 @@ public class PickingPointHub extends PickingPoint {
 	public PickingPointHub(String id, GPSCoordinate ubicacion,
 			LocalTime[][] horario, GroupablePickingPoint[] puntosRecogida,
 			boolean operativo) {
-		super(id, ubicacion, horario, 0, operativo);
+		super(id, ubicacion, horario, 1, operativo);
+
+		setNumeroTaquillas(0);
 
 		if (puntosRecogida.length < 2) {
 			throw new IllegalArgumentException(
 					"Minimo tiene que haber dos puntos de recogida.");
 		}
+		listaPuntos = new ArrayList<>();
+
 		for (int i = 0; i < puntosRecogida.length; i++) {
 			addPickingPoint(puntosRecogida[i]);
 		}
@@ -55,10 +58,7 @@ public class PickingPointHub extends PickingPoint {
 	 * @return
 	 */
 	public GroupablePickingPoint[] getListaPuntos() {
-		ArrayList<GroupablePickingPoint> lista = new ArrayList<>(
-				getListaPuntosInterna());
-		lista.removeAll(Collections.singleton(null));
-		return lista.toArray(new GroupablePickingPoint[0]);
+		return getListaPuntosInterna().toArray(new GroupablePickingPoint[0]);
 	}
 
 	/**
@@ -106,11 +106,12 @@ public class PickingPointHub extends PickingPoint {
 					"Ya hay un punto de recogida con ese nombre.");
 		}
 
+		getListaPuntosInterna().add(numPackageLockers, puntoRecogida);
+
 		if (puntoRecogida.getClass() == PackageLocker.class) {
 			setNumPackageLockers(getNumPackageLockers() + 1);
 
 		}
-		getListaPuntosInterna().add(numPackageLockers, puntoRecogida);
 		int tam = getNumeroTaquillas();
 		tam += puntoRecogida.getNumeroTaquillas();
 		setNumeroTaquillas(tam);
@@ -155,6 +156,18 @@ public class PickingPointHub extends PickingPoint {
 		getListaPuntosInterna().remove(posicion);
 	}
 
+	@Override
+	public int getNumeroTaquillas() {
+		compruebaTam();
+		return super.getNumeroTaquillas();
+	}
+
+	@Override
+	public boolean getOperativo() {
+		compruebaOperativo();
+		return super.getOperativo();
+	}
+
 	/**
 	 * 
 	 */
@@ -172,11 +185,11 @@ public class PickingPointHub extends PickingPoint {
 	protected boolean borrable() {
 		for (int i = 0; i < getListaPuntosInterna().size(); i++) {
 
-			if (getListaPuntos().length == 0) {
-				return true;
+			if (!getListaPuntosInterna().get(i).borrable()) {
+				return false;
 			}
 		}
-		return false;
+		return true;
 
 	}
 
@@ -231,8 +244,6 @@ public class PickingPointHub extends PickingPoint {
 
 	@Override
 	public void asignaPaquete(Package paquete) {
-		compruebaOperativo();
-		compruebaTam();
 		if (!paquete.getPagado()) {
 			boolean kioskValido = false;
 			for (int i = getNumPackageLockers(); i < getListaPuntosInterna()
@@ -288,8 +299,8 @@ public class PickingPointHub extends PickingPoint {
 	@Override
 	public boolean paqueteValido(Package paquete) {
 		int i = 0;
-		while(i < getListaPuntosInterna().size()) {
-			if(getListaPuntosInterna().get(i).paqueteValido(paquete)) {
+		while (i < getListaPuntosInterna().size()) {
+			if (getListaPuntosInterna().get(i).paqueteValido(paquete)) {
 				return true;
 			}
 		}
