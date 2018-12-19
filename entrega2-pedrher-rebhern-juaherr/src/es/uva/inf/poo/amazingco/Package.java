@@ -312,25 +312,17 @@ public class Package {
 	@Override
 	public boolean equals(Object paquete) {
 		if (paquete != null && paquete.getClass() == this.getClass()) {
-			if (((Package) paquete).getDni() != null) {
-				return getId() == ((Package) paquete).getId()
-						&& getFecha().equals(((Package) paquete).getFecha())
-						&& getPrecio() == ((Package) paquete).getPrecio()
-						&& getEstado() == ((Package) paquete).getEstado()
-						&& getCertificado() == ((Package) paquete).getCertificado()
-						&& getPagado() == ((Package) paquete).getPagado()
-						&& getDni().equals(((Package) paquete).getDni());
-			}
-			if (((Package) paquete).getDni() == null) {
-				return getId() == ((Package) paquete).getId()
-						&& getFecha().equals(((Package) paquete).getFecha())
-						&& getPrecio() == ((Package) paquete).getPrecio()
-						&& getEstado() == ((Package) paquete).getEstado()
-						&& getCertificado() == ((Package) paquete).getCertificado()
-						&& getPagado() == ((Package) paquete).getPagado();
+		boolean parcial = getId() == ((Package) paquete).getId()
+				&& getFecha().equals(((Package) paquete).getFecha())
+				&& getPrecio() == ((Package) paquete).getPrecio()
+				&& getEstado() == ((Package) paquete).getEstado()
+				&& getCertificado() == ((Package) paquete).getCertificado()
+				&& getPagado() == ((Package) paquete).getPagado();
 
+			if (((Package) paquete).getCertificado() && getCertificado()) {
+				return parcial && getDni().equals(((Package) paquete).getDni());
 			}
-
+			return parcial;
 		}
 		return false;
 

@@ -233,9 +233,6 @@ public class PickingPointHub extends PickingPoint {
 	public void asignaPaquete(Package paquete) {
 		compruebaOperativo();
 		compruebaTam();
-		if (paquete.getCertificado()) {
-			throw new IllegalArgumentException("El paquete es certificado.");
-		}
 		if (!paquete.getPagado()) {
 			boolean kioskValido = false;
 			for (int i = getNumPackageLockers(); i < getListaPuntosInterna()
