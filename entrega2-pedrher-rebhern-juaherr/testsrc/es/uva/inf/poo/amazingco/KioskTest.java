@@ -67,7 +67,7 @@ public class KioskTest {
 				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
 		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
 
-		Kiosk kiosk = new Kiosk("0", gps, horario, 2);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2,true);
 		Package paquete0 = new Package("0000000000", 0, true);// paquete pagado
 		Package paquete1 = new Package("0000000011", 0, false);// paquete no
 																// pagado
@@ -147,8 +147,38 @@ public class KioskTest {
 	}
 
 	@Test
-	public void testModificarNumTaquillas() {
-		fail("Not yet implemented");
+	public void testModificarNumTaquillasValido() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+		kiosk.modificarNumTaquillas(1);
+		assertEquals(2,kiosk.getNumeroTaquillas());
+		
+		kiosk.modificarNumTaquillas(-1);
+		assertEquals(1,kiosk.getNumeroTaquillas());
+		
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testModificarNumTaquillasMenor1() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+		kiosk.modificarNumTaquillas(-1);
 	}
 
 }

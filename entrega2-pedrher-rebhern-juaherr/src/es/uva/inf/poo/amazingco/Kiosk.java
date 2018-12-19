@@ -58,8 +58,7 @@ public class Kiosk extends GroupablePickingPoint {
 	 *                                  disponibles en el momento.
 	 */
 	public void modificarNumTaquillas(int modificacion) {
-		if (getNumeroTaquillas() - modificacion < 1
-				|| -modificacion > getNumeroTaquillasVacias()) {
+		if ( -modificacion >= getNumeroTaquillasVacias()) {
 			throw new IllegalArgumentException(
 					"No se pueden borrar tantas taquillas.");
 		}
