@@ -54,25 +54,28 @@ public class PickingPointHub extends PickingPoint {
 	}
 
 	/**
+	 * Devuelve un array con todos los PickingPoint.
 	 * 
-	 * @return
+	 * @return array de todos los PickingPoint.
 	 */
 	public GroupablePickingPoint[] getListaPuntos() {
 		return getListaPuntosInterna().toArray(new GroupablePickingPoint[0]);
 	}
 
 	/**
+	 * Devuelve el número de PickingPoints que hay.
 	 * 
-	 * @return
+	 * @return número de PickingPoints que hay.
 	 */
 	public int getNumPuntos() {
 		return getListaPuntosInterna().size();
 	}
 
 	/**
+	 * Comprueba si un PickingPoint esta en el hub mediante su Id.
 	 * 
-	 * @param idPuntoRecogida
-	 * @return
+	 * @param idPuntoRecogida Id del PickingPoint a comprobar.
+	 * @return true si está el PickingPoint y alse si no.
 	 */
 	public boolean estaPuntoRecogida(String idPuntoRecogida) {
 		return (posPuntoRecogida(idPuntoRecogida) != -1);
@@ -88,8 +91,15 @@ public class PickingPointHub extends PickingPoint {
 	}
 
 	/**
+	 * Añade el GroupablePickingPoint pasado siempre que se pueda.
 	 * 
-	 * @param puntoRecogida
+	 * @param puntoRecogida GroupablePickingPoint a añadir.
+	 * 
+	 * @throws IllegalArgumentException si el punto es null.
+	 * @throws IllegalArgumentException si la ubicación no es la misma que la
+	 *                                  del Hub.
+	 * @throws IllegalArgumentException si ya hay un punto con la Id del punto
+	 *                                  pasado.
 	 */
 	public void addPickingPoint(GroupablePickingPoint puntoRecogida) {
 		if (puntoRecogida == null) {
@@ -127,8 +137,16 @@ public class PickingPointHub extends PickingPoint {
 	}
 
 	/**
+	 * Borra un GroupablePickingPoint mediente Id siempre que sea posible.
 	 * 
-	 * @param puntoRecogida
+	 * @param puntoRecogida Id del punto a borrar.
+	 * 
+	 * @throws IllegalStateException    si al borrar ese punto el Hub se quedára
+	 *                                  con menos de dos.
+	 * @throws IllegalStateException    si el punto a borrar tiene paquetes
+	 *                                  dentro de él.
+	 * @throws IllegalArgumentException si la Id es null.
+	 * @throws IllegalArgumentException si no existe ningún punto con esa Id.
 	 */
 	public void removePickingPoints(String idPuntoRecogida) {
 		if (idPuntoRecogida == null) {
@@ -156,12 +174,36 @@ public class PickingPointHub extends PickingPoint {
 		getListaPuntosInterna().remove(posicion);
 	}
 
+	private void compruebaOperativo() {
+		if (!buscaOperativo()) {
+			setOperativo(false);
+		}
+	}
+
+	private void compruebaTam() {
+		int tam = 0;
+		for (int i = 0; i < getListaPuntosInterna().size(); i++) {
+			tam += getListaPuntosInterna().get(i).getNumeroTaquillas();
+		}
+		setNumeroTaquillas(tam);
+	}
+
+	/**
+	 * Actualiza el numero de taquillas antes de devolverlo.
+	 * 
+	 * @see es.uva.inf.poo.amazingco.PickingPoint#getNumeroTaquillas()
+	 */
 	@Override
 	public int getNumeroTaquillas() {
 		compruebaTam();
 		return super.getNumeroTaquillas();
 	}
 
+	/**
+	 * Actualiza la operatividad del Hub antes de devolverlo.
+	 * 
+	 * @see es.uva.inf.poo.amazingco.PickingPoint#getOperativo()
+	 */
 	@Override
 	public boolean getOperativo() {
 		compruebaOperativo();
@@ -169,7 +211,9 @@ public class PickingPointHub extends PickingPoint {
 	}
 
 	/**
+	 * Une el getPaquetes() de todos los puntos en el Hub.
 	 * 
+	 * @see es.uva.inf.poo.amazingco.PickingPoint#getPaquetes()
 	 */
 	@Override
 	public ArrayList<Package> getPaquetes() {
@@ -181,6 +225,11 @@ public class PickingPointHub extends PickingPoint {
 
 	}
 
+	/**
+	 * Es borrable si todos los puntos del Hub son borrables.
+	 * 
+	 * @see es.uva.inf.poo.amazingco.PickingPoint#borrable()
+	 */
 	@Override
 	protected boolean borrable() {
 		for (int i = 0; i < getListaPuntosInterna().size(); i++) {
@@ -204,21 +253,15 @@ public class PickingPointHub extends PickingPoint {
 		return false;
 	}
 
-	private void compruebaOperativo() {
-		if (!buscaOperativo()) {
-			setOperativo(false);
-		}
-	}
-
-	private void compruebaTam() {
-		int tam = 0;
-		for (int i = 0; i < getListaPuntosInterna().size(); i++) {
-			tam += getListaPuntosInterna().get(i).getNumeroTaquillas();
-		}
-		setNumeroTaquillas(tam);
-	}
-
 	/**
+	 * Cambia el estado de todos los puntos internos a no operativo si el Hub se
+	 * pasa a no operativo, solo puede ser puesto en operativo de nuevo si uno
+	 * de los puntos internos está operativo.
+	 * 
+	 * @throws IllegalStateException si se intenta poner en operativo cuando
+	 *                               todos los puntos internos están en no
+	 *                               operativo.
+	 * @see es.uva.inf.poo.amazingco.PickingPoint#operatividad()
 	 * 
 	 */
 	@Override
@@ -242,6 +285,15 @@ public class PickingPointHub extends PickingPoint {
 		}
 	}
 
+	/**
+	 * Asigna el paquete a su lista principal como ademas de a un punto
+	 * apropiado.
+	 * 
+	 * @throws IllegalStateException si se intenta asignar un paquete a
+	 *                               contrarrembolso y no hay ningun Kiosk
+	 *                               activo.
+	 * @see es.uva.inf.poo.amazingco.PickingPoint#asignaPaquete(Package)
+	 */
 	@Override
 	public void asignaPaquete(Package paquete) {
 		if (!paquete.getPagado()) {
@@ -270,6 +322,14 @@ public class PickingPointHub extends PickingPoint {
 		}
 	}
 
+	/**
+	 * Borra el paquete, mendiante su Id, de su lista principal como ademas del
+	 * punto donde está guardado el paquete.
+	 * 
+	 * @throws IllegalArgumentException si la Id dada no pertenece a ningún
+	 *                                  paquete guardado.
+	 * @see es.uva.inf.poo.amazingco.PickingPoint#borraPaquete(int)
+	 */
 	@Override
 	public void borraPaquete(int idTaquilla) {
 		if (idTaquilla < 0 || idTaquilla > getNumeroTaquillas() - 1) {
@@ -296,6 +356,11 @@ public class PickingPointHub extends PickingPoint {
 
 	}
 
+	/**
+	 * Comprueba si un paquete puede ser almacenado en el Hub.
+	 * 
+	 * @see es.uva.inf.poo.amazingco.PickingPoint#paqueteValido(Package)
+	 */
 	@Override
 	public boolean paqueteValido(Package paquete) {
 		int i = 0;
