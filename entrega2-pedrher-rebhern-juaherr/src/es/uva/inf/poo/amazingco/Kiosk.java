@@ -80,7 +80,7 @@ public class Kiosk extends GroupablePickingPoint {
 		}
 		super.asignaPaquete(paquete);
 	}
-
+ 
 	/**
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#sacaPaquete(int, LocalDate)
 	 */

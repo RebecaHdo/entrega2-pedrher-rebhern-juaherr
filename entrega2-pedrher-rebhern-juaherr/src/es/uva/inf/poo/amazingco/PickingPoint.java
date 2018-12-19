@@ -79,6 +79,11 @@ public abstract class PickingPoint {
 		this.horario = horario;
 		this.operativo = operativo;
 		this.numeroTaquillas = numeroTaquillas;
+		this.paquetes = new ArrayList<>(numeroTaquillas);
+		for (int i=0; i< numeroTaquillas; i++) {
+			paquetes.add(null);
+		}
+
 	}
 
 	/**
@@ -140,9 +145,9 @@ public abstract class PickingPoint {
 	 * @return copia de taquillas del PackageLocker.
 	 */
 	public ArrayList<Package> getPaquetes() {
-		ArrayList<Package> paquetes = new ArrayList<>(getPaquetesInterno());
-		paquetes.removeAll(Collections.singleton(null));
-		return paquetes;
+		ArrayList<Package> listaPaquetes = new ArrayList<>(getPaquetesInterno());
+		listaPaquetes.removeAll(Collections.singleton(null));
+		return listaPaquetes;
 	}
 
 	protected ArrayList<Package> getPaquetesInterno() {
@@ -214,8 +219,10 @@ public abstract class PickingPoint {
 	 */
 	public int buscaPaquete(String idPaquete) {
 		int i = 0;
-		while (i < getPaquetes().size()) {
-			if (getPaquetes().get(i).getId() == idPaquete) {
+
+		while (i < getPaquetesInterno().size()) {
+			
+			if (getPaquetesInterno().get(i) != null && getPaquetesInterno().get(i).getId() == idPaquete) {
 				return i;
 			}
 			i++;
@@ -274,15 +281,19 @@ public abstract class PickingPoint {
 
 		// guarda el paquete en la primera taquilla libre.
 		int i = 0;
+		boolean colocado=false;
 		while (i < getNumeroTaquillas()) {
 			if (getPaquetesInterno().get(i) == null) {
 				getPaquetesInterno().set(i, paquete);
+				colocado=true;
 				i = getNumeroTaquillas();
 			} else {
 				i++;
 			}
 		}
-
+		if(!colocado) {
+			getPaquetesInterno().add(paquete);
+		}
 		setOcupadas(getNumeroTaquillasLlenas() + 1);
 
 	}
@@ -350,8 +361,8 @@ public abstract class PickingPoint {
 					"El PickingPoint no está operativo.");
 
 		}
-		if (!getHorario()[dia][0].isAfter(hora)
-				&& !getHorario()[dia][1].isBefore(hora)) {
+		if (getHorario()[dia][0].isAfter(hora)
+				&& getHorario()[dia][1].isBefore(hora)) {
 			throw new IllegalArgumentException(
 					"El PickingPoint está cerrado a esta hora del dia.");
 		}
@@ -368,7 +379,7 @@ public abstract class PickingPoint {
 
 		}
 		getPaquetesInterno().get(idTaquilla).recogido(fechaSacada);
-	}
+	} 
 
 	/**
 	 * Modifica el estado del paquete a devuelto de la taquilla dada.
