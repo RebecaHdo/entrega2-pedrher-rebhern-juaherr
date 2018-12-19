@@ -80,7 +80,7 @@ public abstract class PickingPoint {
 		this.operativo = operativo;
 		this.numeroTaquillas = numeroTaquillas;
 		this.paquetes = new ArrayList<>(numeroTaquillas);
-		for (int i=0; i< numeroTaquillas; i++) {
+		for (int i = 0; i < numeroTaquillas; i++) {
 			paquetes.add(null);
 		}
 
@@ -145,7 +145,8 @@ public abstract class PickingPoint {
 	 * @return copia de taquillas del PackageLocker.
 	 */
 	public ArrayList<Package> getPaquetes() {
-		ArrayList<Package> listaPaquetes = new ArrayList<>(getPaquetesInterno());
+		ArrayList<Package> listaPaquetes = new ArrayList<>(
+				getPaquetesInterno());
 		listaPaquetes.removeAll(Collections.singleton(null));
 		return listaPaquetes;
 	}
@@ -216,8 +217,9 @@ public abstract class PickingPoint {
 		int i = 0;
 
 		while (i < getPaquetesInterno().size()) {
-			
-			if (getPaquetesInterno().get(i) != null && getPaquetesInterno().get(i).getId() == idPaquete) {
+
+			if (getPaquetesInterno().get(i) != null
+					&& getPaquetesInterno().get(i).getId() == idPaquete) {
 				return i;
 			}
 			i++;
@@ -286,17 +288,17 @@ public abstract class PickingPoint {
 
 		// guarda el paquete en la primera taquilla libre.
 		int i = 0;
-		boolean colocado=false;
+		boolean colocado = false;
 		while (i < getNumeroTaquillas()) {
 			if (getPaquetesInterno().get(i) == null) {
 				getPaquetesInterno().set(i, paquete);
-				colocado=true;
+				colocado = true;
 				i = getNumeroTaquillas();
 			} else {
 				i++;
 			}
 		}
-		if(!colocado) {
+		if (!colocado) {
 			getPaquetesInterno().add(paquete);
 		}
 		setOcupadas(getNumeroTaquillasLlenas() + 1);
@@ -384,7 +386,7 @@ public abstract class PickingPoint {
 
 		}
 		getPaquetesInterno().get(idTaquilla).recogido(fechaSacada);
-	} 
+	}
 
 	/**
 	 * Modifica el estado del paquete a devuelto de la taquilla dada.

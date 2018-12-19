@@ -67,7 +67,6 @@ public class Kiosk extends GroupablePickingPoint {
 		setNumeroTaquillas(modificacion + getNumeroTaquillas());
 	}
 
- 
 	/**
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#sacaPaquete(int, LocalDate)
 	 */

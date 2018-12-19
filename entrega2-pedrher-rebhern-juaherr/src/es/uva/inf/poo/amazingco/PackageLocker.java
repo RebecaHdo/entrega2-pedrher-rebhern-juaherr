@@ -23,7 +23,6 @@ public class PackageLocker extends GroupablePickingPoint {
 		super(id, ubicacion, horario, numeroTaquillas, operativo);
 	}
 
-
 	@Override
 	public boolean paqueteValido(Package paquete) {
 		return !paquete.getPagado() && super.paqueteValido(paquete);

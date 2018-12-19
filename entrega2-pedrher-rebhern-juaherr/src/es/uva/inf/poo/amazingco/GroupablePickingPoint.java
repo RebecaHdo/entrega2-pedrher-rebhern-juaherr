@@ -7,7 +7,6 @@ import es.uva.inf.poo.maps.GPSCoordinate;
 
 public abstract class GroupablePickingPoint extends PickingPoint {
 
-
 	/**
 	 * Inicializa el GroupablePickingPoint operativo con la id, ubicación,
 	 * horario semanal y número de taquillas.
@@ -57,12 +56,11 @@ public abstract class GroupablePickingPoint extends PickingPoint {
 			LocalTime[][] horario, int numeroTaquillas, boolean operativo) {
 		super(id, ubicacion, horario, numeroTaquillas, operativo);
 	}
-	
+
 	@Override
 	public boolean paqueteValido(Package paquete) {
 		return !paquete.getCertificado();
 	}
-	
 
 	@Override
 	protected boolean borrable() {
