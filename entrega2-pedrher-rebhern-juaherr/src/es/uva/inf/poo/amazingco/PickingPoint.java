@@ -207,12 +207,7 @@ public abstract class PickingPoint {
 		setOperativo(!getOperativo());
 	}
 
-	/**
-	 * 
-	 * @param idPaquete
-	 * @return
-	 */
-	public int buscaPaquete(String idPaquete) {
+	protected int buscaPaquete(String idPaquete) {
 		int i = 0;
 		while (i < getPaquetes().size()) {
 			if (getPaquetes().get(i).getId() == idPaquete) {
