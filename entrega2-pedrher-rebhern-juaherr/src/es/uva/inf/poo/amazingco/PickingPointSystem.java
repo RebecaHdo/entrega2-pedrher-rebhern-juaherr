@@ -3,8 +3,6 @@ package es.uva.inf.poo.amazingco;
 import java.util.ArrayList;
 import es.uva.inf.poo.maps.GPSCoordinate;
 
-//TODO acabar ultimo punto y revisar las otras, por si aca.
-
 /**
  * Administra los PickingPoint, pudiendo añadirlos o eliminarlos, ver los
  * operativos y fuera de servicio, encontrar los que hay en un radio dado, ver
@@ -38,14 +36,15 @@ public class PickingPointSystem {
 	 * @throws IllegalArgumentException si el pickingPoint es nulo.
 	 */
 	public void addPickingPoint(PickingPoint pickingPoint) {
+
+		if (pickingPoint == null) {
+			throw new IllegalArgumentException("El pickingPoint es nulo");
+		}
 		for (int i = 0; i < getListaPickingPoint().size(); i++) {
 			if (getListaPickingPoint().get(i).getId() == pickingPoint.getId()) {
 				throw new IllegalArgumentException(
 						"Ya hay un picking point con la misma id.");
 			}
-		}
-		if (pickingPoint == null) {
-			throw new IllegalArgumentException("El pickingPoint es nulo");
 		}
 		listaPickingPoint.add(pickingPoint);
 	}
@@ -106,8 +105,7 @@ public class PickingPointSystem {
 	 */
 	public PickingPoint[] getPickingPointOperativos() {
 		// recorre dos veces la lista de PickingPoints creados. Una para
-		// conocer el
-		// tamaño del vector que se devulve y otra para rellenarlo.
+		// conocer el tamaño del vector que se devuelve y otra para rellenarlo.
 		if (getListaPickingPoint().isEmpty()) {
 			throw new IllegalStateException("No hay PickingPoints creados.");
 		}

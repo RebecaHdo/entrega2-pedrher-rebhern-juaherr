@@ -52,13 +52,8 @@ public abstract class PickingPoint {
 					"Son necesarios los horarios de los 7 dias de la semana.");
 		}
 		for (int i = 0; i < 7; i++) {
-			if (horario[i] == null) {
-				throw new IllegalArgumentException("Uno de los dias es null.");
-			}
-			if (horario[i].length != 2) {
-				throw new IllegalArgumentException(
-						"Cada dia tiene que tener horario de apertura y cierre");
-
+			if (horario[i] == null || horario[i].length != 2) {
+				throw new IllegalArgumentException("Días mal introducidos.");
 			}
 			for (int j = 0; j < 2; j++) {
 				if (horario[i][j] == null
