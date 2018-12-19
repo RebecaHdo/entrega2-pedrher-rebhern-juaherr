@@ -1,6 +1,5 @@
 package es.uva.inf.poo.amazingco;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import es.uva.inf.poo.maps.GPSCoordinate;
 
@@ -39,6 +38,12 @@ public class PickingPointSystem {
 	 * @throws IllegalArgumentException si el pickingPoint es nulo.
 	 */
 	public void addPickingPoint(PickingPoint pickingPoint) {
+		for (int i = 0; i < getListaPickingPoint().size(); i++) {
+			if (getListaPickingPoint().get(i).getId() == pickingPoint.getId()) {
+				throw new IllegalArgumentException(
+						"Ya hay un picking point con la misma id.");
+			}
+		}
 		if (pickingPoint == null) {
 			throw new IllegalArgumentException("El pickingPoint es nulo");
 		}
@@ -257,6 +262,30 @@ public class PickingPointSystem {
 			if (getListaPickingPoint().get(i).getNumeroTaquillasVacias() != 0
 					&& getListaPickingPoint().get(i).getOperativo()) {
 				vector[contador] = getListaPickingPoint().get(i);
+				contador++;
+			}
+		}
+		return vector;
+	}
+
+	public PickingPoint[] getPickingPointEnZonaValidas(GPSCoordinate ubicacion,
+			double radio, Package paquete) {
+
+		PickingPoint puntosEnZona[] = getPickingPointEnZona(ubicacion, radio);
+		int contador = 0;
+		for (int i = 0; i < puntosEnZona.length; i++) {
+			if (puntosEnZona[i].getNumeroTaquillasVacias() != 0
+					&& puntosEnZona[i].paqueteValido(paquete)) {
+				contador++;
+			}
+		}
+		PickingPoint[] vector = new PickingPoint[contador];
+
+		contador = 0;
+		for (int i = 0; i < getListaPickingPoint().size(); i++) {
+			if (puntosEnZona[i].getNumeroTaquillasVacias() != 0
+					&& puntosEnZona[i].paqueteValido(paquete)) {
+				vector[contador] = puntosEnZona[i];
 				contador++;
 			}
 		}

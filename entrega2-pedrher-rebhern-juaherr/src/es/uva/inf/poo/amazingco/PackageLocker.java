@@ -23,20 +23,10 @@ public class PackageLocker extends GroupablePickingPoint {
 		super(id, ubicacion, horario, numeroTaquillas, operativo);
 	}
 
-	@Override
-	public void asignaPaquete(Package paquete) {
-		if (paquete == null) {
-			throw new IllegalArgumentException("El paquete es null.");
-		}
-		if (paquete.getCertificado()) {
-			throw new IllegalArgumentException("El paquete es certificado.");
-		}
-		if (paquete.getPagado()) {
-			throw new IllegalArgumentException(
-					"El paquete se paga a contrarreembolso.");
-		}
-		super.asignaPaquete(paquete);
 
+	@Override
+	public boolean paqueteValido(Package paquete) {
+		return !paquete.getPagado() && super.paqueteValido(paquete);
 	}
 
 }

@@ -1,6 +1,5 @@
 package es.uva.inf.poo.amazingco;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -108,7 +107,7 @@ public class PickingPointHub extends PickingPoint {
 		}
 
 		if (puntoRecogida.getClass() == PackageLocker.class) {
-			numPackageLockers++;
+			setNumPackageLockers(getNumPackageLockers() + 1);
 
 		}
 		getListaPuntosInterna().add(numPackageLockers, puntoRecogida);
@@ -116,6 +115,14 @@ public class PickingPointHub extends PickingPoint {
 		tam += puntoRecogida.getNumeroTaquillas();
 		setNumeroTaquillas(tam);
 
+	}
+
+	private int getNumPackageLockers() {
+		return numPackageLockers;
+	}
+
+	private void setNumPackageLockers(int num) {
+		numPackageLockers = num;
 	}
 
 	/**
@@ -141,7 +148,10 @@ public class PickingPointHub extends PickingPoint {
 		if (!getListaPuntosInterna().get(posicion).borrable()) {
 			throw new IllegalStateException("La taquilla tiene paquetes.");
 		}
-
+		if (getListaPuntosInterna().get(posicion)
+				.getClass() == PackageLocker.class) {
+			setNumPackageLockers(getNumPackageLockers() - 1);
+		}
 		getListaPuntosInterna().remove(posicion);
 	}
 
@@ -223,6 +233,24 @@ public class PickingPointHub extends PickingPoint {
 	public void asignaPaquete(Package paquete) {
 		compruebaOperativo();
 		compruebaTam();
+		if (paquete.getCertificado()) {
+			throw new IllegalArgumentException("El paquete es certificado.");
+		}
+		if (!paquete.getPagado()) {
+			boolean kioskValido = false;
+			for (int i = getNumPackageLockers(); i < getListaPuntosInterna()
+					.size(); i++) {
+				if (getListaPuntosInterna().get(i)
+						.getNumeroTaquillasVacias() > 0) {
+					kioskValido = true;
+				}
+			}
+			if (!kioskValido) {
+				throw new IllegalStateException(
+						"No hay ningún kiosko valido donde guardar el paquete.");
+
+			}
+		}
 		super.asignaPaquete(paquete);
 		int i = 0;
 		while (i < getListaPuntosInterna().size()) {
@@ -249,7 +277,7 @@ public class PickingPointHub extends PickingPoint {
 		while (i < getListaPuntosInterna().size()) {
 			if (getListaPuntosInterna().get(i)
 					.buscaPaquete(paquete.getId()) > 0) {
-				
+
 				int pos = getListaPuntosInterna().get(i)
 						.locaclizaPaquete(paquete.getId());
 				getListaPuntosInterna().get(i).borraPaquete(pos);
@@ -258,5 +286,16 @@ public class PickingPointHub extends PickingPoint {
 			i++;
 		}
 
+	}
+
+	@Override
+	public boolean paqueteValido(Package paquete) {
+		int i = 0;
+		while(i < getListaPuntosInterna().size()) {
+			if(getListaPuntosInterna().get(i).paqueteValido(paquete)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

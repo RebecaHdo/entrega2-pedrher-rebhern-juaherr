@@ -153,4 +153,9 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 		return paq.isEmpty();
 
 	}
+
+	@Override
+	public boolean paqueteValido(Package paquete) {
+		return true;
+	}
 }

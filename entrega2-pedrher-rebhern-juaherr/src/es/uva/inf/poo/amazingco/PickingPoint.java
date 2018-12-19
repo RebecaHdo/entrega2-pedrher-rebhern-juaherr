@@ -250,6 +250,11 @@ public abstract class PickingPoint {
 	}
 
 	/**
+	 * 
+	 */
+	public abstract boolean paqueteValido(Package paquete);
+
+	/**
 	 * Asigna el paquete dado a una taquilla.
 	 * 
 	 * @param paquete paquete a guardar.
@@ -267,6 +272,11 @@ public abstract class PickingPoint {
 		}
 		if (getNumeroTaquillasLlenas() == getNumeroTaquillas()) {
 			throw new IllegalStateException("PickingPoint lleno.");
+		}
+
+		if (!paqueteValido(paquete)) {
+			throw new IllegalStateException(
+					"Paquete no valido para el picking point.");
 		}
 		// comprueba que no haya un paquete con la misma id en el PackageLocker.
 

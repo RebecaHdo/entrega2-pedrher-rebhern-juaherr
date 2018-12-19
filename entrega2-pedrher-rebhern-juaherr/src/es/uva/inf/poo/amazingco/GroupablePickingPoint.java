@@ -58,6 +58,11 @@ public abstract class GroupablePickingPoint extends PickingPoint {
 		super(id, ubicacion, horario, numeroTaquillas, operativo);
 	}
 	
+	@Override
+	public boolean paqueteValido(Package paquete) {
+		return !paquete.getCertificado();
+	}
+	
 
 	@Override
 	protected boolean borrable() {

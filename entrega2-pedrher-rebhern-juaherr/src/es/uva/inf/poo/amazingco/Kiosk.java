@@ -67,19 +67,6 @@ public class Kiosk extends GroupablePickingPoint {
 		setNumeroTaquillas(modificacion + getNumeroTaquillas());
 	}
 
-	/**
-	 * @see es.uva.inf.poo.amazingco.PickingPoint#asignaPaquete(Package)
-	 */
-	@Override
-	public void asignaPaquete(Package paquete) {
-		if (paquete == null) {
-			throw new IllegalArgumentException("El paquete es null.");
-		}
-		if (paquete.getCertificado()) {
-			throw new IllegalArgumentException("El paquete es certificado.");
-		}
-		super.asignaPaquete(paquete);
-	}
  
 	/**
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#sacaPaquete(int, LocalDate)
