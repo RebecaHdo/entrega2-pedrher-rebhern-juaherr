@@ -31,8 +31,8 @@ public class Package {
 	private HashSet<String> dni;
 
 	/**
-	 * Devuelve el número de dias que puede estar un paquete en una taquilla
-	 * como máximo.
+	 * Devuelve el número de dias que puede estar un paquete en una taquilla como
+	 * máximo.
 	 *
 	 * @return número de dias que puede estar un paquete en una taquilla como
 	 *         máximo.
@@ -47,15 +47,14 @@ public class Package {
 	 * 
 	 * El tiempo por defecto de margen de días es 7.
 	 * 
-	 * @param dias número de dias que puede estar un paquete en una taquilla
-	 *             como máximo.
+	 * @param dias número de dias que puede estar un paquete en una taquilla como
+	 *             máximo.
 	 * 
 	 * @throws IllegalArgumentException si el número de días es negativo.
 	 */
 	public static void setDiasMaximos(int dias) {
 		if (dias < 0) {
-			throw new IllegalArgumentException(
-					"Número máximo de días negativo.");
+			throw new IllegalArgumentException("Número máximo de días negativo.");
 		}
 		diasMaximos = dias;
 	}
@@ -66,25 +65,23 @@ public class Package {
 	 * 
 	 * 
 	 * La id del paquete sigue la siguiente restricción: "Debe tener diez
-	 * caracteres, de los cuales los primeros nueve son dígitos y el décimo es
-	 * un dígito resultante del resto de la división entre 10 de la suma de los
-	 * 9 primeros."
+	 * caracteres, de los cuales los primeros nueve son dígitos y el décimo es un
+	 * dígito resultante del resto de la división entre 10 de la suma de los 9
+	 * primeros."
 	 * 
-	 * @param id     id del paquete siguiendo las restriciones de id: "Debe
-	 *               tener diez caracteres, de los cuales los primeros nueve son
-	 *               dígitos y el décimo es un dígito resultante del resto de la
-	 *               división entre 10 de la suma de los 9 primeros."
+	 * @param id     id del paquete siguiendo las restriciones de id: "Debe tener
+	 *               diez caracteres, de los cuales los primeros nueve son dígitos y
+	 *               el décimo es un dígito resultante del resto de la división
+	 *               entre 10 de la suma de los 9 primeros."
 	 * 
 	 * @param precio precio del paquete.
 	 * @param pagado si está pagado o no.
 	 * @throws IllegalArgumentException si la id es null.
-	 * @throws IllegalArgumentException si la longitud de la id es distinta de
-	 *                                  10.
+	 * @throws IllegalArgumentException si la longitud de la id es distinta de 10.
 	 * 
-	 * @throws IllegalArgumentException si los caracteres de la id son distintos
-	 *                                  de [0,9].
-	 * @throws IllegalArgumentException si no se verifica el dígito de
-	 *                                  condición.
+	 * @throws IllegalArgumentException si los caracteres de la id son distintos de
+	 *                                  [0,9].
+	 * @throws IllegalArgumentException si no se verifica el dígito de condición.
 	 * 
 	 * @throws IllegalArgumentException si El precio es negativo.
 	 * 
@@ -94,8 +91,7 @@ public class Package {
 			throw new IllegalArgumentException("La id es null.");
 		}
 		if (id.length() != 10) {
-			throw new IllegalArgumentException(
-					"La id no tiene no tiene 10 dígitos.");
+			throw new IllegalArgumentException("La id no tiene no tiene 10 dígitos.");
 		}
 		int acumulado = 0;
 		// Transforma cada dígito de char a int para después operar con ellos.
@@ -108,20 +104,17 @@ public class Package {
 			if (digito < 10 && digito > -1) {
 				acumulado += (digito);
 			} else {
-				throw new IllegalArgumentException(
-						"La id contiene caracteres distintos de [0,9].");
+				throw new IllegalArgumentException("La id contiene caracteres distintos de [0,9].");
 			}
 		}
 		if (acumulado % 10 == (id.charAt(9) - '0')) {
 			this.id = id;
 			fechaCreacion = LocalDate.now();
 		} else {
-			throw new IllegalArgumentException(
-					"No se verifica el dígito de condición.");
+			throw new IllegalArgumentException("No se verifica el dígito de condición.");
 		}
 		if (precio < 0) {
-			throw new IllegalArgumentException(
-					"El precio no puede ser negativo.");
+			throw new IllegalArgumentException("El precio no puede ser negativo.");
 		}
 		this.precio = precio;
 		this.pagado = pagado;
@@ -130,30 +123,28 @@ public class Package {
 	}
 
 	/**
-	 * Inicializa el paquete certificado con la id, precio, estado del pago, dni
-	 * del autorizado y fecha límite a partir de la fecha actual.
+	 * Inicializa el paquete certificado con la id, precio, estado del pago, dni del
+	 * autorizado y fecha límite a partir de la fecha actual.
 	 * 
 	 * La id del paquete sigue la siguiente restricción: "Debe tener diez
-	 * caracteres, de los cuales los primeros nueve son dígitos y el décimo es
-	 * un dígito resultante del resto de la división entre 10 de la suma de los
-	 * 9 primeros."
+	 * caracteres, de los cuales los primeros nueve son dígitos y el décimo es un
+	 * dígito resultante del resto de la división entre 10 de la suma de los 9
+	 * primeros."
 	 * 
-	 * @param id     id del paquete siguiendo las restriciones de id: "Debe
-	 *               tener diez caracteres, de los cuales los primeros nueve son
-	 *               dígitos y el décimo es un dígito resultante del resto de la
-	 *               división entre 10 de la suma de los 9 primeros."
+	 * @param id     id del paquete siguiendo las restriciones de id: "Debe tener
+	 *               diez caracteres, de los cuales los primeros nueve son dígitos y
+	 *               el décimo es un dígito resultante del resto de la división
+	 *               entre 10 de la suma de los 9 primeros."
 	 * 
 	 * @param precio precio del paquete.
 	 * @param pagado si está pagado o no.
 	 * @param dni    array de dnis autorizados.
 	 * @throws IllegalArgumentException si la id es null.
-	 * @throws IllegalArgumentException si la longitud de la id es distinta de
-	 *                                  10.
+	 * @throws IllegalArgumentException si la longitud de la id es distinta de 10.
 	 * 
-	 * @throws IllegalArgumentException si los caracteres de la id son distintos
-	 *                                  de [0,9].
-	 * @throws IllegalArgumentException si no se verifica el dígito de
-	 *                                  condición.
+	 * @throws IllegalArgumentException si los caracteres de la id son distintos de
+	 *                                  [0,9].
+	 * @throws IllegalArgumentException si no se verifica el dígito de condición.
 	 * 
 	 * @throws IllegalArgumentException si El precio es negativo.
 	 * 
@@ -210,6 +201,7 @@ public class Package {
 
 	// Usar cuando se necesite el Set de dnis.
 	private HashSet<String> getDni() {
+		System.out.println("Getdni " +dni);
 		return dni;
 	}
 
@@ -247,8 +239,7 @@ public class Package {
 	 */
 	public void addDni(String[] dni) {
 		if (getEstado() != 0) {
-			throw new IllegalStateException(
-					"El paquete ya no está en la taquilla.");
+			throw new IllegalStateException("El paquete ya no está en la taquilla.");
 		}
 		if (!getCertificado()) {
 			throw new IllegalStateException("El paquete no está certificado.");
@@ -258,16 +249,14 @@ public class Package {
 				throw new IllegalArgumentException("Uno de los dni es null.");
 			}
 			if (getDni().contains(dni[i])) {
-				throw new IllegalArgumentException(
-						"Uno de los dni esta ya en la lista.");
+				throw new IllegalArgumentException("Uno de los dni esta ya en la lista.");
 			}
 			getDni().add(dni[i]);
 		}
 	}
 
 	/**
-	 * Indica si todavia se puede recoger el paquete respecto a la fecha dada.
-	 * <br>
+	 * Indica si todavia se puede recoger el paquete respecto a la fecha dada. <br>
 	 * <br>
 	 * Se admite que se pueda recoger el mismo día que vence la fecha límite.
 	 * 
@@ -283,11 +272,11 @@ public class Package {
 	}
 
 	/**
-	 * Cambia el estado del paquete a recogido en caso de que esté en el plazo
-	 * de entrega y siga en el taquilla.
+	 * Cambia el estado del paquete a recogido en caso de que esté en el plazo de
+	 * entrega y siga en el taquilla.
 	 * 
-	 * @throws IllegalStateException si el paquete se intenta recoger pero su
-	 *                               estado es 1 (recogido) o 2 (devuelto).
+	 * @throws IllegalStateException si el paquete se intenta recoger pero su estado
+	 *                               es 1 (recogido) o 2 (devuelto).
 	 * @throws IllegalStateException si {@code fechaEnPlazo == False}.
 	 */
 	public void recogido(LocalDate fecha) {
@@ -300,14 +289,12 @@ public class Package {
 				throw new IllegalStateException("Paquete ya devuelto.");
 			}
 		} else {
-			throw new IllegalStateException(
-					"La fecha de entrega ha sido superada.");
+			throw new IllegalStateException("La fecha de entrega ha sido superada.");
 		}
 	}
 
 	/**
-	 * Cambia el estado del paquete a devuelto en caso de que siga en la
-	 * taquilla.
+	 * Cambia el estado del paquete a devuelto en caso de que siga en la taquilla.
 	 * 
 	 * @throws IllegalStateException si el paquete se intenta devolver pero su
 	 *                               estado es 1 (recogido) o 2 (devuelto).
@@ -325,23 +312,34 @@ public class Package {
 	@Override
 	public boolean equals(Object paquete) {
 		if (paquete != null && paquete.getClass() == this.getClass()) {
-			return getId() == ((Package) paquete).getId()
-					&& getFecha().equals(((Package) paquete).getFecha())
-					&& getPrecio() == ((Package) paquete).getPrecio()
-					&& getEstado() == ((Package) paquete).getEstado()
-					&& getCertificado() == ((Package) paquete).getCertificado()
-					&& getPagado() == ((Package) paquete).getPagado()
-					&& getDni().equals(((Package) paquete).getDni());
-		} else {
-			return false;
+			if (((Package) paquete).getDni() != null) {
+				return getId() == ((Package) paquete).getId()
+						&& getFecha().equals(((Package) paquete).getFecha())
+						&& getPrecio() == ((Package) paquete).getPrecio()
+						&& getEstado() == ((Package) paquete).getEstado()
+						&& getCertificado() == ((Package) paquete).getCertificado()
+						&& getPagado() == ((Package) paquete).getPagado()
+						&& getDni().equals(((Package) paquete).getDni());
+			}
+			if (((Package) paquete).getDni() == null) {
+				return getId() == ((Package) paquete).getId()
+						&& getFecha().equals(((Package) paquete).getFecha())
+						&& getPrecio() == ((Package) paquete).getPrecio()
+						&& getEstado() == ((Package) paquete).getEstado()
+						&& getCertificado() == ((Package) paquete).getCertificado()
+						&& getPagado() == ((Package) paquete).getPagado();
+
+			}
+
 		}
+		return false;
 
 	}
 
 	@Override
 	public String toString() {
-		String resultado = "La id es " + getId() + ", su fecha limite es "
-				+ getFecha().toString() + ", con precio " + getPrecio();
+		String resultado = "La id es " + getId() + ", su fecha limite es " + getFecha().toString() + ", con precio "
+				+ getPrecio();
 		if (getPagado()) {
 			resultado += ", está pagado";
 		} else {
@@ -349,8 +347,7 @@ public class Package {
 		}
 
 		if (getCertificado()) {
-			resultado += ", está certificado con los DNIs: "
-					+ getDni().toString();
+			resultado += ", está certificado con los DNIs: " + getDni().toString();
 		} else {
 			resultado += ", no está certificado";
 
