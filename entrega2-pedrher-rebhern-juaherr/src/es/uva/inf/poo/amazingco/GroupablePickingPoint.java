@@ -7,7 +7,6 @@ import es.uva.inf.poo.maps.GPSCoordinate;
 
 public abstract class GroupablePickingPoint extends PickingPoint {
 
-	private ArrayList<Package> paquetes;
 
 	/**
 	 * Inicializa el GroupablePickingPoint operativo con la id, ubicación,
@@ -58,11 +57,7 @@ public abstract class GroupablePickingPoint extends PickingPoint {
 			LocalTime[][] horario, int numeroTaquillas, boolean operativo) {
 		super(id, ubicacion, horario, numeroTaquillas, operativo);
 	}
-
-	@Override
-	protected ArrayList<Package> getPaquetesInterno() {
-		return paquetes;
-	}
+	
 
 	@Override
 	protected boolean borrable() {

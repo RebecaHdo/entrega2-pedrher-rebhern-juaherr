@@ -41,6 +41,8 @@ public class Kiosk extends GroupablePickingPoint {
 	}
 
 	/**
+	 * import java.util.ArrayList;
+	 * 
 	 * Paga el dinero debido a AmazingCo.
 	 */
 	public void dineroAmazingCo() {
@@ -84,8 +86,9 @@ public class Kiosk extends GroupablePickingPoint {
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#sacaPaquete(int, LocalDate)
 	 */
 	@Override
-	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada) {
-		super.sacaPaquete(idTaquilla, fechaSacada);
+	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada, int dia,
+			LocalTime hora) {
+		super.sacaPaquete(idTaquilla, fechaSacada, dia, hora);
 
 		Package paquete = getPaquetesInterno().get(idTaquilla);
 		if (!paquete.getPagado()) {
@@ -94,5 +97,4 @@ public class Kiosk extends GroupablePickingPoint {
 		}
 	}
 
-	
 }

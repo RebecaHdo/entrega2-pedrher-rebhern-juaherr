@@ -8,7 +8,6 @@ import es.uva.inf.poo.maps.GPSCoordinate;
 
 public class PostOffice extends PickingPoint implements IdentificationRegistry {
 
-	private ArrayList<Package> paquetes;
 	private double dinero = 0;
 	ArrayList<Object[]> registro = new ArrayList<>();
 	private static final String NO_EN_EL_REGISTRO = "El paquete no está en el registro.";
@@ -53,7 +52,7 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#sacaPaquete(int, LocalDate)
 	 */
 	@Override
-	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada) {
+	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada, int dia, LocalTime hora) {
 
 		Package paquete = getPaquetesInterno().get(idTaquilla);
 
@@ -65,7 +64,7 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 			throw new IllegalStateException("El paquete está certificado");
 		}
 
-		super.sacaPaquete(idTaquilla, fechaSacada);
+		super.sacaPaquete(idTaquilla, fechaSacada, dia, hora);
 
 		if (!paquete.getPagado()) {
 			setDinero(getDinero() + paquete.getPrecio());
@@ -147,10 +146,6 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 
 	}
 
-	@Override
-	protected ArrayList<Package> getPaquetesInterno() {
-		return paquetes;
-	}
 
 	@Override
 	protected boolean borrable() {
