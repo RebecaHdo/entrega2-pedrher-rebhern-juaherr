@@ -41,7 +41,6 @@ public class Kiosk extends GroupablePickingPoint {
 	}
 
 	/**
-	 * import java.util.ArrayList;
 	 * 
 	 * Paga el dinero debido a AmazingCo.
 	 */
