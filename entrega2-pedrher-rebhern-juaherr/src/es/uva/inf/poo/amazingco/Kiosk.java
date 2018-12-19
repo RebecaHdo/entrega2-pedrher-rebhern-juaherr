@@ -2,7 +2,6 @@ package es.uva.inf.poo.amazingco;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 
 import es.uva.inf.poo.maps.GPSCoordinate;
 
