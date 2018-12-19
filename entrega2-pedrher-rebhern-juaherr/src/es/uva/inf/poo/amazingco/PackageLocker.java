@@ -5,13 +5,13 @@ import java.time.LocalTime;
 import es.uva.inf.poo.maps.GPSCoordinate;
 
 public class PackageLocker extends GroupablePickingPoint {
-/**
- * 
- * @param id
- * @param ubicacion
- * @param horario
- * @param numeroTaquillas
- */
+	/**
+	 * 
+	 * @param id
+	 * @param ubicacion
+	 * @param horario
+	 * @param numeroTaquillas
+	 */
 	public PackageLocker(String id, GPSCoordinate ubicacion,
 			LocalTime[][] horario, int numeroTaquillas) {
 		super(id, ubicacion, horario, numeroTaquillas);
@@ -39,5 +39,4 @@ public class PackageLocker extends GroupablePickingPoint {
 
 	}
 
-	
 }

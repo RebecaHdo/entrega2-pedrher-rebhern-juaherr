@@ -1,5 +1,6 @@
 package es.uva.inf.poo.amazingco;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,6 +10,7 @@ import es.uva.inf.poo.maps.GPSCoordinate;
 public class PickingPointHub extends PickingPoint {
 
 	ArrayList<GroupablePickingPoint> listaPuntos = new ArrayList<>();
+
 	int numPackageLockers = 0;
 
 	/**
@@ -124,9 +126,10 @@ public class PickingPointHub extends PickingPoint {
 		if (idPuntoRecogida == null) {
 			throw new IllegalArgumentException("La String es null.");
 		}
-		
+
 		if (getNumPuntos() < 3) {
-			throw new IllegalStateException("Tiene que haber al menos dos puntos de recogida.");
+			throw new IllegalStateException(
+					"Tiene que haber al menos dos puntos de recogida.");
 
 		}
 		int posicion = posPuntoRecogida(idPuntoRecogida);
@@ -167,9 +170,93 @@ public class PickingPointHub extends PickingPoint {
 
 	}
 
+	private boolean buscaOperativo() {
+		int i = 0;
+		while (i < getListaPuntosInterna().size()) {
+			if (getListaPuntosInterna().get(i).getOperativo()) {
+				return true;
+			}
+			i++;
+		}
+		return false;
+	}
+
+	private void compruebaOperativo() {
+		if (!buscaOperativo()) {
+			setOperativo(false);
+		}
+	}
+
+	private void compruebaTam() {
+		int tam = 0;
+		for (int i = 0; i < getListaPuntosInterna().size(); i++) {
+			tam += getListaPuntosInterna().get(i).getNumeroTaquillas();
+		}
+		setNumeroTaquillas(tam);
+	}
+
+	/**
+	 * 
+	 */
 	@Override
-	protected ArrayList<Package> getPaquetesInterno() {
-		// TODO Auto-generated method stub
-		return null;
+	public void operatividad() {
+		if (getOperativo()) {
+			setOperativo(false);
+
+			for (int i = 0; i < getListaPuntosInterna().size(); i++) {
+				if (getListaPuntosInterna().get(i).getOperativo()) {
+					getListaPuntosInterna().get(i).operatividad();
+				}
+			}
+		} else {
+
+			if (!buscaOperativo()) {
+				throw new IllegalStateException(
+						"Tiene que haber al menos un punto operativo para activar el Hub.");
+			}
+			setOperativo(true);
+
+		}
+	}
+
+	@Override
+	public void asignaPaquete(Package paquete) {
+		compruebaOperativo();
+		compruebaTam();
+		super.asignaPaquete(paquete);
+		int i = 0;
+		while (i < getListaPuntosInterna().size()) {
+			if (getListaPuntosInterna().get(i).getNumeroTaquillasVacias() > 0) {
+				getListaPuntosInterna().get(i).asignaPaquete(paquete);
+				i = getListaPuntosInterna().size();
+			}
+			i++;
+		}
+	}
+
+	@Override
+	public void borraPaquete(int idTaquilla) {
+		if (idTaquilla < 0 || idTaquilla > getNumeroTaquillas() - 1) {
+			throw new IllegalArgumentException(
+					"Número de taquilla erroneo. Debe estar comprendido entre 0 y numero de taquillas -1");
+		}
+
+		Package paquete = getPaquetesInterno().get(idTaquilla);
+
+		super.borraPaquete(idTaquilla);
+
+		int i = 0;
+		while (i < getListaPuntosInterna().size()) {
+			if (getListaPuntosInterna().get(i)
+					.buscaPaquete(paquete.getId()) > 0) {
+				
+				int pos = getListaPuntosInterna().get(i)
+						.locaclizaPaquete(paquete.getId());
+				getListaPuntosInterna().get(i).borraPaquete(pos);
+				i = getListaPuntosInterna().size();
+			}
+			i++;
+		}
+
 	}
 }

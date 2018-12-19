@@ -13,6 +13,7 @@ public abstract class PickingPoint {
 	private GPSCoordinate ubicacion;
 	private LocalTime[][] horario;
 	private int numeroTaquillas;
+	private ArrayList<Package> paquetes;
 	private int ocupadas;
 	private boolean operativo;
 
@@ -112,7 +113,7 @@ public abstract class PickingPoint {
 
 	}
 
-	private void setOperativo(boolean op) {
+	protected void setOperativo(boolean op) {
 		operativo = op;
 	}
 
@@ -144,7 +145,9 @@ public abstract class PickingPoint {
 		return paquetes;
 	}
 
-	protected abstract ArrayList<Package> getPaquetesInterno();
+	protected ArrayList<Package> getPaquetesInterno() {
+		return paquetes;
+	}
 
 	protected abstract boolean borrable();
 
@@ -204,7 +207,12 @@ public abstract class PickingPoint {
 		setOperativo(!getOperativo());
 	}
 
-	private int buscaPaquete(String idPaquete) {
+	/**
+	 * 
+	 * @param idPaquete
+	 * @return
+	 */
+	public int buscaPaquete(String idPaquete) {
 		int i = 0;
 		while (i < getPaquetes().size()) {
 			if (getPaquetes().get(i).getId() == idPaquete) {
@@ -232,7 +240,7 @@ public abstract class PickingPoint {
 		int posicion = buscaPaquete(idPaquete);
 		if (posicion == -1) {
 			throw new IllegalArgumentException(
-					"No existe ese paquete en el PackageLocker.");
+					"No existe ese paquete en el PickingPoint.");
 		} else {
 			return posicion;
 		}
@@ -252,8 +260,11 @@ public abstract class PickingPoint {
 		if (paquete == null) {
 			throw new IllegalArgumentException("El paquete es null.");
 		}
+		if (!getOperativo()) {
+			throw new IllegalStateException("PickingPoint no operativo.");
+		}
 		if (getNumeroTaquillasLlenas() == getNumeroTaquillas()) {
-			throw new IllegalStateException("PackageLocker lleno.");
+			throw new IllegalStateException("PickingPoint lleno.");
 		}
 		// comprueba que no haya un paquete con la misma id en el PackageLocker.
 
@@ -325,15 +336,24 @@ public abstract class PickingPoint {
 	 * 
 	 * @param idTaquilla  id de la taquilla de la que sacar el paquete.
 	 * @param fechaSacada fecha en la que se saca el paquete.
+	 * @param dia         dia de la semana que se saca, lunes = 0.
+	 * @param hora        hora en la que se saca.
+	 * 
 	 * @throws IllegalArgumentException si el número de taquilla es erróneo.
 	 * @throws IllegalStateException    si la taquilla está vacia o si la fecha
 	 *                                  de entrega ha sido superada.
 	 */
-	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada) {
+	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada, int dia,
+			LocalTime hora) {
 		if (!getOperativo()) {
 			throw new IllegalStateException(
-					"El PackageLocker no está operativo.");
+					"El PickingPoint no está operativo.");
 
+		}
+		if (!getHorario()[dia][0].isAfter(hora)
+				&& !getHorario()[dia][1].isBefore(hora)) {
+			throw new IllegalArgumentException(
+					"El PickingPoint está cerrado a esta hora del dia.");
 		}
 		if (idTaquilla < 0 || idTaquilla > getNumeroTaquillas() - 1) {
 			throw new IllegalArgumentException(

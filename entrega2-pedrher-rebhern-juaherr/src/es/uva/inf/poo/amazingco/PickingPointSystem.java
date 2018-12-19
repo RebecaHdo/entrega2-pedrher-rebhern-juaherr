@@ -51,8 +51,7 @@ public class PickingPointSystem {
 	 * @return todos los PickingPoint.
 	 */
 	public PickingPoint[] getTodosPickingPoint() {
-		PickingPoint[] vector = new PickingPoint[getListaPickingPoint()
-				.size()];
+		PickingPoint[] vector = new PickingPoint[getListaPickingPoint().size()];
 		for (int i = 0; i < getListaPickingPoint().size(); i++) {
 			vector[i] = getListaPickingPoint().get(i);
 		}
@@ -160,8 +159,8 @@ public class PickingPointSystem {
 	 * 
 	 * @param ubicacion zona desde la que se genera el radio.
 	 * @param radio     distancia desde la ubicación que se quiere abarcar.
-	 * @return todos los PickingPoints operativos que están en el radio
-	 *         indicado desde la ubicación indicada.
+	 * @return todos los PickingPoints operativos que están en el radio indicado
+	 *         desde la ubicación indicada.
 	 * @throws IllegalArgumentException si la ubicaón introducida es nula.
 	 * @throws IllegalArgumentException si el radio dado es negativo.
 	 * @throws IllegalStateException    si no hay PickingPoints creados.
@@ -217,16 +216,14 @@ public class PickingPointSystem {
 		}
 		int contador = 0;
 		for (int i = 0; i < getListaPickingPoint().size(); i++) {
-			if (getListaPickingPoint().get(i)
-					.getNumeroTaquillasVacias() != 0) {
+			if (getListaPickingPoint().get(i).getNumeroTaquillasVacias() != 0) {
 				contador++;
 			}
 		}
 		PickingPoint[] vector = new PickingPoint[contador];
 		contador = 0;
 		for (int i = 0; i < getListaPickingPoint().size(); i++) {
-			if (getListaPickingPoint().get(i)
-					.getNumeroTaquillasVacias() != 0) {
+			if (getListaPickingPoint().get(i).getNumeroTaquillasVacias() != 0) {
 				vector[contador] = getListaPickingPoint().get(i);
 				contador++;
 			}
@@ -301,7 +298,6 @@ public class PickingPointSystem {
 		if (!encontrado) {
 			throw new IllegalArgumentException(
 					"No existe ningún PickingPoint con esa id.");
-
 		}
 	}
 }
