@@ -275,7 +275,7 @@ public abstract class PickingPoint {
 		}
 
 		if (!paqueteValido(paquete)) {
-			throw new IllegalStateException(
+			throw new IllegalArgumentException(
 					"Paquete no valido para el picking point.");
 		}
 		// comprueba que no haya un paquete con la misma id en el PackageLocker.
