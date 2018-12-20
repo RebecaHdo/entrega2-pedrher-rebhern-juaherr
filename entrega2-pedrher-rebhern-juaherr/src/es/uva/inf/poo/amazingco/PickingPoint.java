@@ -77,7 +77,7 @@ public abstract class PickingPoint {
 		this.operativo = operativo;
 		this.numeroTaquillas = numeroTaquillas;
 
-		this.paquetes = new ArrayList<>(numeroTaquillas);
+		this.paquetes = new ArrayList<>();
 
 	}
 
@@ -212,9 +212,9 @@ public abstract class PickingPoint {
 		int i = 0;
 
 		while (i < getPaquetesInterno().size()) {
-
 			if (getPaquetesInterno().get(i) != null
 					&& getPaquetesInterno().get(i).getId() == idPaquete) {
+
 				return i;
 			}
 			i++;

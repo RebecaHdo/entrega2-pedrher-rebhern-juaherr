@@ -345,14 +345,12 @@ public class PickingPointHub extends PickingPoint {
 		}
 
 		Package paquete = getPaquetesInterno().get(idTaquilla);
-
 		super.borraPaquete(idTaquilla);
 
 		int i = 0;
 		while (i < getListaPuntosInterna().size()) {
 			if (getListaPuntosInterna().get(i)
-					.buscaPaquete(paquete.getId()) > 0) {
-
+					.buscaPaquete(paquete.getId()) > -1) {
 				int pos = getListaPuntosInterna().get(i)
 						.locaclizaPaquete(paquete.getId());
 				getListaPuntosInterna().get(i).borraPaquete(pos);
