@@ -323,6 +323,9 @@ public class Package {
 		}
 	}
 
+	/**
+	 * @see java.util.Objects#equals(Object)
+	 */
 	@Override
 	public boolean equals(Object paquete) {
 		if (paquete != null && paquete.getClass() == this.getClass()) {
@@ -341,7 +344,9 @@ public class Package {
 		return false;
 
 	}
-
+	/**
+	 * @see java.lang.String#toString()
+	 */
 	@Override
 	public String toString() {
 		String resultado = "La id es " + getId() + ", su fecha limite es "
