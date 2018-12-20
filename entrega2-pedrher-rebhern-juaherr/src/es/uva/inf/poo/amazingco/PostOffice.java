@@ -162,6 +162,9 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 	 */
 	@Override
 	public boolean paqueteValido(Package paquete) {
+		if (paquete == null) {
+			throw new IllegalArgumentException("El paquete es null.");
+		}
 		return true;
 	}
 }

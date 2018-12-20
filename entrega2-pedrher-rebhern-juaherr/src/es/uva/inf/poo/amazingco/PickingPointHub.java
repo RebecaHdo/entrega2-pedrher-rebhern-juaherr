@@ -47,10 +47,6 @@ public class PickingPointHub extends PickingPoint {
 		for (int i = 0; i < puntosRecogida.length; i++) {
 			addPickingPoint(puntosRecogida[i]);
 		}
-
-		for (int i = 0; i < getNumeroTaquillas(); i++) {
-			getPaquetesInterno().add(null);
-		}
 	}
 
 	private ArrayList<GroupablePickingPoint> getListaPuntosInterna() {

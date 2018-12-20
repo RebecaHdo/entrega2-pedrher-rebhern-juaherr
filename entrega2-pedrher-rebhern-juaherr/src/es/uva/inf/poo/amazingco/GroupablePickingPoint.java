@@ -30,7 +30,6 @@ public abstract class GroupablePickingPoint extends PickingPoint {
 	/**
 	 * Un paquete es valido siempre que no sea certificado.
 	 * 
-	 * @throws IllegalArgumentException si el paquete es null.
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#paqueteValido(Package)
 	 */
 	@Override

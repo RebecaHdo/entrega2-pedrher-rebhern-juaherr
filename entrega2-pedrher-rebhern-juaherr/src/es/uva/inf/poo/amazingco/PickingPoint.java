@@ -76,10 +76,8 @@ public abstract class PickingPoint {
 		this.horario = horario;
 		this.operativo = operativo;
 		this.numeroTaquillas = numeroTaquillas;
+
 		this.paquetes = new ArrayList<>(numeroTaquillas);
-		for (int i = 0; i < numeroTaquillas; i++) {
-			paquetes.add(null);
-		}
 
 	}
 
@@ -255,7 +253,7 @@ public abstract class PickingPoint {
 	 * @param paquete paquete a comprobar.
 	 * @return true si se puede guardar y false si no.
 	 */
-	public abstract boolean paqueteValido(Package paquete) throws IllegalArgumentException;
+	public abstract boolean paqueteValido(Package paquete);
 
 	/**
 	 * Asigna el paquete dado a una taquilla.
@@ -289,13 +287,14 @@ public abstract class PickingPoint {
 
 		// guarda el paquete en la primera taquilla libre.
 		int i = 0;
-		boolean colocado = false;
 		while (i < getNumeroTaquillas()) {
+			if (getPaquetesInterno().size() == i) {
+				getPaquetesInterno().add(paquete);
+				i = getNumeroTaquillas();
 
-			if (getPaquetesInterno().get(i) == null) {
+			} else if (getPaquetesInterno().get(i) == null) {
 
 				getPaquetesInterno().set(i, paquete);
-				colocado = true;
 				i = getNumeroTaquillas();
 			} else {
 				i++;
@@ -303,9 +302,6 @@ public abstract class PickingPoint {
 
 		}
 
-		if (!colocado) {
-			getPaquetesInterno().add(paquete);
-		}
 		setOcupadas(getNumeroTaquillasLlenas() + 1);
 
 	}
