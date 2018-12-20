@@ -158,53 +158,6 @@ public class PickingPointSystem {
 	}
 
 	/**
-	 * Devuelve los PackagerLockers en radio dado desde una ubicación dada.
-	 * 
-	 * @param ubicacion zona desde la que se genera el radio.
-	 * @param radio     distancia desde la ubicación que se quiere abarcar.
-	 * @return todos los PickingPoints operativos que están en el radio indicado
-	 *         desde la ubicación indicada.
-	 * @throws IllegalArgumentException si la ubicaón introducida es nula.
-	 * @throws IllegalArgumentException si el radio dado es negativo.
-	 * @throws IllegalStateException    si no hay PickingPoints creados.
-	 */
-	public PickingPoint[] getPickingPointEnZona(GPSCoordinate ubicacion,
-			double radio) {
-		if (ubicacion == null) {
-			throw new IllegalArgumentException("La ubicación es nula.");
-		}
-		if (getListaPickingPoint().isEmpty()) {
-			throw new IllegalStateException("No hay PickingPoints creados.");
-		}
-		if (radio < 0) {
-			throw new IllegalArgumentException(
-					"El radio no puede ser negativo.");
-		}
-		int contador = 0;
-		for (int i = 0; i < getListaPickingPoint().size(); i++) {
-			double distancia = getListaPickingPoint().get(i).getUbicacion()
-					.getDistanceTo(ubicacion);
-			distancia *= 1000;
-			if (distancia <= radio) {
-				contador++;
-			}
-		}
-		PickingPoint[] vector = new PickingPoint[contador];
-		contador = 0;
-		for (int i = 0; i < getListaPickingPoint().size(); i++) {
-			double distancia = getListaPickingPoint().get(i).getUbicacion()
-					.getDistanceTo(ubicacion);
-			distancia *= 1000;
-			if (distancia <= radio) {
-				vector[contador] = getListaPickingPoint().get(i);
-				contador++;
-			}
-		}
-		return vector;
-
-	}
-
-	/**
 	 * Devuelve todos los PickingPoints con alguna taquilla vacia.
 	 * 
 	 * @return PickingPoints con taquillas vacias.
@@ -235,40 +188,71 @@ public class PickingPointSystem {
 	}
 
 	/**
-	 * Devuelve todos los PickingPoints operativos con alguna taquilla vacia.
+	 * Devuelve los PackagerLockers en radio dado desde una ubicación dada.
 	 * 
-	 * @return PickingPoints operativos con taquillas vacias.
-	 * @throws IllegalStateException si no hay PickingPoints creados.
+	 * @param ubicacion zona desde la que se genera el radio.
+	 * @param radio     distancia desde la ubicación que se quiere abarcar.
+	 * @return todos los PickingPoints operativos que están en el radio indicado
+	 *         desde la ubicación indicada.
+	 * @throws IllegalArgumentException si la ubicaón introducida es nula.
+	 * @throws IllegalArgumentException si el radio dado es negativo.
+	 * @throws IllegalStateException    si no hay PickingPoints creados.
 	 */
-	public PickingPoint[] getPickingPointTaquillasVaciasOperativas() {
-		// recorre dos veces la lista de PickingPoints creados. Una para
-		// conocer el
-		// tamaño del vector que se devulve y otra para rellenarlo.
+	public PickingPoint[] getPickingPointEnZona(GPSCoordinate ubicacion,
+			double radio) {
+		if (ubicacion == null) {
+			throw new IllegalArgumentException("La ubicación es nula.");
+		}
+		if (radio < 0) {
+			throw new IllegalArgumentException(
+					"El radio no puede ser negativo.");
+		}
 		if (getListaPickingPoint().isEmpty()) {
 			throw new IllegalStateException("No hay PickingPoints creados.");
 		}
+
 		int contador = 0;
 		for (int i = 0; i < getListaPickingPoint().size(); i++) {
-			if (getListaPickingPoint().get(i).getNumeroTaquillasVacias() != 0
-					&& getListaPickingPoint().get(i).getOperativo()) {
+			double distancia = getListaPickingPoint().get(i).getUbicacion()
+					.getDistanceTo(ubicacion);
+			distancia *= 1000;
+			if (distancia <= radio) {
 				contador++;
 			}
 		}
 		PickingPoint[] vector = new PickingPoint[contador];
 		contador = 0;
 		for (int i = 0; i < getListaPickingPoint().size(); i++) {
-			if (getListaPickingPoint().get(i).getNumeroTaquillasVacias() != 0
-					&& getListaPickingPoint().get(i).getOperativo()) {
+			double distancia = getListaPickingPoint().get(i).getUbicacion()
+					.getDistanceTo(ubicacion);
+			distancia *= 1000;
+			if (distancia <= radio) {
 				vector[contador] = getListaPickingPoint().get(i);
 				contador++;
 			}
 		}
 		return vector;
+
 	}
 
-	public PickingPoint[] getPickingPointEnZonaValidas(GPSCoordinate ubicacion,
+	/**
+	 * Dada una ubicación, un radio y un paquete indica que picking points hay a
+	 * dicho radio de la ubicación donde se puede guardar el paquete indicado.
+	 * 
+	 * 
+	 * @param ubicacion ubicación desde la que parte el radio.
+	 * @param radio     distancia máxima entre labicaicón dada y el picing
+	 *                  point.
+	 * @param paquete   paquete que se quiere guardar en un picking point.
+	 * @return array con todos los picking points en los que se puede guarar el
+	 *         paquete indicado dentro del radio indicado desde la ubicacion
+	 *         dada.
+	 */
+	public PickingPoint[] getPickingPointEnZonaPaquete(GPSCoordinate ubicacion,
 			double radio, Package paquete) {
-
+		if (paquete == null) {
+			throw new IllegalArgumentException("Paquete es null");
+		}
 		PickingPoint[] puntosEnZona = getPickingPointEnZona(ubicacion, radio);
 		int contador = 0;
 		for (int i = 0; i < puntosEnZona.length; i++) {
@@ -280,7 +264,7 @@ public class PickingPointSystem {
 		PickingPoint[] vector = new PickingPoint[contador];
 
 		contador = 0;
-		for (int i = 0; i < getListaPickingPoint().size(); i++) {
+		for (int i = 0; i < vector.length; i++) {
 			if (puntosEnZona[i].getNumeroTaquillasVacias() != 0
 					&& puntosEnZona[i].paqueteValido(paquete)) {
 				vector[contador] = puntosEnZona[i];
@@ -309,11 +293,11 @@ public class PickingPointSystem {
 		while (i < getListaPickingPoint().size()) {
 			PickingPoint pickingPoint = getListaPickingPoint().get(i);
 			if (id == pickingPoint.getId()) {
-				for (int j = 0; j < pickingPoint.getNumeroTaquillas(); j++) {
-					if (pickingPoint.getPaquetes().get(j) != null) {
-						throw new IllegalStateException(
-								"Todavia hay paquetes en el PickingPoint.");
-					}
+
+				if (!pickingPoint.borrable()) {
+					throw new IllegalStateException(
+							"Todavia hay paquetes en el PickingPoint.");
+
 				}
 				getListaPickingPoint().remove(i);
 				i = getListaPickingPoint().size();
