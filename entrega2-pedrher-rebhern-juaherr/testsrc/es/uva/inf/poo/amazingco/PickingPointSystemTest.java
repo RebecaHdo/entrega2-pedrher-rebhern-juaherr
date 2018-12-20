@@ -10,7 +10,9 @@ import org.junit.Test;
 import es.uva.inf.poo.maps.GPSCoordinate;
 
 public class PickingPointSystemTest {
-
+	/*
+	 * Test addPickingPoint()
+	 */
 	@Test
 	public void testAddPickingPoint() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -25,7 +27,8 @@ public class PickingPointSystemTest {
 		PackageLocker locker = new PackageLocker("1", gps, horario, 2);
 		PostOffice office = new PostOffice("2", gps, horario);
 		GroupablePickingPoint[] puntosRecogida = { kiosk, locker };
-		PickingPointHub hub = new PickingPointHub("3", gps, horario, puntosRecogida);
+		PickingPointHub hub = new PickingPointHub("3", gps, horario,
+				puntosRecogida);
 		PickingPointSystem pps = new PickingPointSystem();
 
 		pps.addPickingPoint(kiosk);
@@ -39,12 +42,15 @@ public class PickingPointSystemTest {
 		pps.addPickingPoint(office);
 		assertEquals(3, pps.getTodosPickingPoint().length);
 		assertEquals(office, pps.getPickingPoint("2"));
-		
+
 		pps.addPickingPoint(hub);
 		assertEquals(4, pps.getTodosPickingPoint().length);
 		assertEquals(hub, pps.getPickingPoint("3"));
 
 	}
+	/*
+	 * Test addPickingPoint()
+	 */
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testAddPickingPointNull() {
@@ -71,6 +77,10 @@ public class PickingPointSystemTest {
 		pps.addPickingPoint(locker);
 	}
 
+	/*
+	 * Test getTodosPickingPoint()
+	 */
+
 	@Test
 	public void testGetTodosPickingPoint() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -92,6 +102,9 @@ public class PickingPointSystemTest {
 		assertTrue(Arrays.asList(pps.getTodosPickingPoint()).contains(locker));
 	}
 
+	/*
+	 * Test getPickingPoint()
+	 */
 	@Test
 	public void testGetPickingPoint() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -132,14 +145,15 @@ public class PickingPointSystemTest {
 				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
 		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
 		Kiosk kiosk = new Kiosk("0", gps, horario, 2);
-		PackageLocker locker = new PackageLocker("1", gps, horario, 2);
 		PickingPointSystem pps = new PickingPointSystem();
 		pps.addPickingPoint(kiosk);
-		pps.addPickingPoint(locker);
 		pps.getPickingPoint("a");
 
 	}
 
+	/*
+	 * Test getPickingPointOperativos()
+	 */
 	@Test
 	public void testGetPickingPointOperativos() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -168,6 +182,9 @@ public class PickingPointSystemTest {
 		PickingPointSystem pps = new PickingPointSystem();
 		pps.getPickingPointOperativos();
 	}
+	/*
+	 * Test getPickingPointFeueraDeServicio()
+	 */
 
 	@Test
 	public void testGetPickingPointFueraDeServicio() {
@@ -179,17 +196,18 @@ public class PickingPointSystemTest {
 				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
 				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
 		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
-		Kiosk kiosk = new Kiosk("0", gps, horario, 2, false);// no operativo
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2, false);// fuera de
+																// servicio
 		PackageLocker locker = new PackageLocker("1", gps, horario, 2);
 		PickingPointSystem pps = new PickingPointSystem();
 
 		pps.addPickingPoint(kiosk);
 		pps.addPickingPoint(locker);
 		assertEquals(1, pps.getPickingPointFueraDeServicio().length);
-		assertFalse(Arrays.asList(pps.getPickingPointFueraDeServicio())
-				.contains(locker));
 		assertTrue(Arrays.asList(pps.getPickingPointFueraDeServicio())
 				.contains(kiosk));
+		assertFalse(Arrays.asList(pps.getPickingPointFueraDeServicio())
+				.contains(locker));
 	}
 
 	@Test(expected = IllegalStateException.class)
@@ -198,6 +216,9 @@ public class PickingPointSystemTest {
 		pps.getPickingPointFueraDeServicio();
 	}
 
+	/*
+	 * Test getPickingPointTaquillasVacias()
+	 */
 	@Test
 	public void testGetPickingPointTaquillasVacias() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -208,6 +229,7 @@ public class PickingPointSystemTest {
 				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
 				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
 		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
 		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
 		PackageLocker locker = new PackageLocker("1", gps, horario, 1);
 		PickingPointSystem pps = new PickingPointSystem();
@@ -229,6 +251,9 @@ public class PickingPointSystemTest {
 		pps.getPickingPointTaquillasVacias();
 	}
 
+	/*
+	 * Test getPickingPointEnZona()
+	 */
 	@Test
 	public void testGetPickingPointEnZona() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -248,7 +273,7 @@ public class PickingPointSystemTest {
 		PackageLocker locker = new PackageLocker("1", gps, horario, 2);
 		PickingPointSystem pps = new PickingPointSystem();
 
-		pps.addPickingPoint(kiosk1);// este no está dentro del radio
+		pps.addPickingPoint(kiosk1);// no está dentro del radio
 		pps.addPickingPoint(kiosk);
 		assertEquals(1, pps.getPickingPointEnZona(gps2, 1).length);
 		assertTrue(Arrays.asList(pps.getPickingPointEnZona(gps2, 1))
@@ -281,6 +306,10 @@ public class PickingPointSystemTest {
 		pps.getPickingPointEnZona(gps, 1);
 	}
 
+	/*
+	 * Test getPickingPointEnZonaPaquete()
+	 */
+
 	@Test
 	public void testGetPickingPointEnZonaPaquete() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -301,7 +330,7 @@ public class PickingPointSystemTest {
 		PickingPointSystem pps = new PickingPointSystem();
 		Package paquete0 = new Package("0000000000", 0, true);
 
-		pps.addPickingPoint(kiosk1);// este no está dentro del radio
+		pps.addPickingPoint(kiosk1);// no está dentro del radio
 		pps.addPickingPoint(kiosk);
 		assertEquals(1,
 				pps.getPickingPointEnZonaPaquete(gps2, 1, paquete0).length);
@@ -323,6 +352,9 @@ public class PickingPointSystemTest {
 		GPSCoordinate gps = new GPSCoordinate(1, 1);
 		pps.getPickingPointEnZonaPaquete(gps, 1, null);
 	}
+	/*
+	 * Test eliminarPickingPoint()
+	 */
 
 	@Test
 	public void testEliminarPickingPoint() {
@@ -337,25 +369,38 @@ public class PickingPointSystemTest {
 
 		Kiosk kiosk = new Kiosk("0", gps, horario, 2);
 		PackageLocker locker = new PackageLocker("1", gps, horario, 2);
+		PostOffice office = new PostOffice("2", gps, horario);
+		GroupablePickingPoint[] puntosRecogida = { kiosk, locker };
+		PickingPointHub hub = new PickingPointHub("3", gps, horario,
+				puntosRecogida);
 
 		PickingPointSystem pps = new PickingPointSystem();
 
 		pps.addPickingPoint(kiosk);
 		pps.addPickingPoint(locker);
+		pps.addPickingPoint(office);
+		pps.addPickingPoint(hub);
+
 		pps.eliminarPickingPoint("0");// elimina el kiosk
-		assertEquals(1, pps.getTodosPickingPoint().length);
+		assertEquals(3, pps.getTodosPickingPoint().length);
 		assertFalse(Arrays.asList(pps.getTodosPickingPoint()).contains(kiosk));
+
 		pps.eliminarPickingPoint("1");
-		assertEquals(0, pps.getTodosPickingPoint().length);
+		assertEquals(2, pps.getTodosPickingPoint().length);
 		assertFalse(Arrays.asList(pps.getTodosPickingPoint()).contains(locker));
+
+		pps.eliminarPickingPoint("2");
+		assertEquals(1, pps.getTodosPickingPoint().length);
+		assertFalse(Arrays.asList(pps.getTodosPickingPoint()).contains(office));
+
+		pps.eliminarPickingPoint("3");
+		assertEquals(0, pps.getTodosPickingPoint().length);
+		assertFalse(Arrays.asList(pps.getTodosPickingPoint()).contains(hub));
 
 	}
 
-	/*
-	 * Pruebas no válidas del metodo EliminarPickingPoint().
-	 */
 	@Test(expected = IllegalStateException.class)
-	public void testEliminarPickingPOintTodaviaHayPaquetes() {
+	public void testEliminarPickingPointTodaviaHayPaquetes() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
 				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
 				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
@@ -369,6 +414,7 @@ public class PickingPointSystemTest {
 		Package paquete0 = new Package("0000000000", 0, true);
 		kiosk.asignaPaquete(paquete0);
 		PickingPointSystem pps = new PickingPointSystem();
+
 		pps.addPickingPoint(kiosk);
 		pps.eliminarPickingPoint("0");
 	}
@@ -392,8 +438,9 @@ public class PickingPointSystemTest {
 
 		PickingPointSystem pps = new PickingPointSystem();
 		Kiosk kiosk = new Kiosk("0", gps, horario, 2);
+
 		pps.addPickingPoint(kiosk);
-		pps.eliminarPickingPoint("1");
+		pps.eliminarPickingPoint("a");
 	}
 
 }

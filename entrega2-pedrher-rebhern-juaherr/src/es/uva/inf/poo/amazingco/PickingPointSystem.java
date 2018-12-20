@@ -5,8 +5,9 @@ import es.uva.inf.poo.maps.GPSCoordinate;
 
 /**
  * Administra los PickingPoint, pudiendo añadirlos o eliminarlos, ver los
- * operativos y fuera de servicio, encontrar los que hay en un radio dado, ver
- * cuales tienen taquillas vacias y cuales están completamente llenos.
+ * operativos y fuera de servicio, encontrar los que hay en un radio dado y
+ * saber en cuales de ellos se puede introducir un paquete concreto, ver cuales
+ * tienen taquillas vacias y cuales están completamente llenos.
  * 
  * @author juaherr
  * @author rebhern
@@ -14,6 +15,15 @@ import es.uva.inf.poo.maps.GPSCoordinate;
  * 
  */
 public class PickingPointSystem {
+	// constantes de error
+	private static final String PICKING_POINT_NULO = "El pickingPoint introducdo es nulo";
+	private static final String PICKING_POINT_MISMA_ID = "Ya hay un picking point con la misma id.";
+	private static final String PICKING_POINT_NO_CREADO = "No hay PickingPoints creados.";
+	private static final String PICKING_POINT_SIN_ID = "No existe ningún PickingPoint con la id introducida.";
+	private static final String UBICACION_NULA = "La ubicación introducida es nula.";
+	private static final String RADIO_NEGATIVO = "El radio introducido no puede ser negativo.";
+	private static final String PAQUETE_NULL = "El paquete introducido es null.";
+	private static final String PAQUETES_EN_PICKING_POINT = "Hay paquetes en el PickingPoint.";
 
 	private ArrayList<PickingPoint> listaPickingPoint;
 
@@ -38,12 +48,11 @@ public class PickingPointSystem {
 	public void addPickingPoint(PickingPoint pickingPoint) {
 
 		if (pickingPoint == null) {
-			throw new IllegalArgumentException("El pickingPoint es nulo");
+			throw new IllegalArgumentException(PICKING_POINT_NULO);
 		}
 		for (int i = 0; i < getListaPickingPoint().size(); i++) {
 			if (getListaPickingPoint().get(i).getId() == pickingPoint.getId()) {
-				throw new IllegalArgumentException(
-						"Ya hay un picking point con la misma id.");
+				throw new IllegalArgumentException(PICKING_POINT_MISMA_ID);
 			}
 		}
 		listaPickingPoint.add(pickingPoint);
@@ -74,7 +83,7 @@ public class PickingPointSystem {
 	 */
 	public PickingPoint getPickingPoint(String id) {
 		if (getListaPickingPoint().isEmpty()) {
-			throw new IllegalStateException("No hay PickingPoints creados.");
+			throw new IllegalStateException(PICKING_POINT_NO_CREADO);
 		}
 		int i = 0;
 		PickingPoint pickingPoint = null;
@@ -88,8 +97,7 @@ public class PickingPointSystem {
 			}
 		}
 		if (pickingPoint == null) {
-			throw new IllegalArgumentException(
-					"No existe ningún PickingPoint con esa id.");
+			throw new IllegalArgumentException(PICKING_POINT_SIN_ID);
 
 		} else {
 			return pickingPoint;
@@ -107,7 +115,7 @@ public class PickingPointSystem {
 		// recorre dos veces la lista de PickingPoints creados. Una para
 		// conocer el tamaño del vector que se devuelve y otra para rellenarlo.
 		if (getListaPickingPoint().isEmpty()) {
-			throw new IllegalStateException("No hay PickingPoints creados.");
+			throw new IllegalStateException(PICKING_POINT_NO_CREADO);
 		}
 		int contador = 0;
 		for (int i = 0; i < getListaPickingPoint().size(); i++) {
@@ -138,7 +146,7 @@ public class PickingPointSystem {
 		// conocer el
 		// tamaño del vector que se devulve y otra para rellenarlo.
 		if (getListaPickingPoint().isEmpty()) {
-			throw new IllegalStateException("No hay PickingPoints guardados.");
+			throw new IllegalStateException(PICKING_POINT_NO_CREADO);
 		}
 		int contador = 0;
 		for (int i = 0; i < getListaPickingPoint().size(); i++) {
@@ -165,10 +173,9 @@ public class PickingPointSystem {
 	 */
 	public PickingPoint[] getPickingPointTaquillasVacias() {
 		// recorre dos veces la lista de PickingPoints creados. Una para
-		// conocer el
-		// tamaño del vector que se devulve y otra para rellenarlo.
+		// conocer el tamaño del vector que se devulve y otra para rellenarlo.
 		if (getListaPickingPoint().isEmpty()) {
-			throw new IllegalStateException("No hay PickingPoints creados.");
+			throw new IllegalStateException(PICKING_POINT_NO_CREADO);
 		}
 		int contador = 0;
 		for (int i = 0; i < getListaPickingPoint().size(); i++) {
@@ -188,7 +195,8 @@ public class PickingPointSystem {
 	}
 
 	/**
-	 * Devuelve los PackagerLockers en radio dado desde una ubicación dada.
+	 * Devuelve los PickingPoints existentes dentro de un radio dado desde una
+	 * ubicación dada.
 	 * 
 	 * @param ubicacion zona desde la que se genera el radio.
 	 * @param radio     distancia desde la ubicación que se quiere abarcar.
@@ -201,14 +209,13 @@ public class PickingPointSystem {
 	public PickingPoint[] getPickingPointEnZona(GPSCoordinate ubicacion,
 			double radio) {
 		if (ubicacion == null) {
-			throw new IllegalArgumentException("La ubicación es nula.");
+			throw new IllegalArgumentException(UBICACION_NULA);
 		}
 		if (radio < 0) {
-			throw new IllegalArgumentException(
-					"El radio no puede ser negativo.");
+			throw new IllegalArgumentException(RADIO_NEGATIVO);
 		}
 		if (getListaPickingPoint().isEmpty()) {
-			throw new IllegalStateException("No hay PickingPoints creados.");
+			throw new IllegalStateException(PICKING_POINT_NO_CREADO);
 		}
 
 		int contador = 0;
@@ -237,21 +244,22 @@ public class PickingPointSystem {
 
 	/**
 	 * Dada una ubicación, un radio y un paquete indica que picking points hay a
-	 * dicho radio de la ubicación donde se puede guardar el paquete indicado.
+	 * dicho radio de la ubicación donde se puede guardar el paquete.
 	 * 
 	 * 
 	 * @param ubicacion ubicación desde la que parte el radio.
-	 * @param radio     distancia máxima entre labicaicón dada y el picing
+	 * @param radio     distancia máxima entre la ubicaicón dada y el picking
 	 *                  point.
 	 * @param paquete   paquete que se quiere guardar en un picking point.
-	 * @return array con todos los picking points en los que se puede guarar el
-	 *         paquete indicado dentro del radio indicado desde la ubicacion
-	 *         dada.
+	 * @return todos los picking points en los que se puede guarar el paquete
+	 *         indicado dentro del radio indicado desde la ubicacion dada.
+	 * 
+	 * @throws IllegalArgumentException si el paquete introducido es null.
 	 */
 	public PickingPoint[] getPickingPointEnZonaPaquete(GPSCoordinate ubicacion,
 			double radio, Package paquete) {
 		if (paquete == null) {
-			throw new IllegalArgumentException("Paquete es null");
+			throw new IllegalArgumentException(PAQUETE_NULL);
 		}
 		PickingPoint[] puntosEnZona = getPickingPointEnZona(ubicacion, radio);
 		int contador = 0;
@@ -275,7 +283,7 @@ public class PickingPointSystem {
 	}
 
 	/**
-	 * Elimina un PickingPoint por id introducida.
+	 * Elimina el PickingPoint con la id introducida.
 	 * 
 	 * @param id del PickingPoint a borrar.
 	 * @throws IllegalStateException    si no hay ningún PickingPoint creado.
@@ -286,7 +294,7 @@ public class PickingPointSystem {
 	 */
 	public void eliminarPickingPoint(String id) {
 		if (getListaPickingPoint().isEmpty()) {
-			throw new IllegalStateException("No hay PickingPoints creado.");
+			throw new IllegalStateException(PICKING_POINT_NO_CREADO);
 		}
 		int i = 0;
 		boolean encontrado = false;
@@ -295,8 +303,7 @@ public class PickingPointSystem {
 			if (id == pickingPoint.getId()) {
 
 				if (!pickingPoint.borrable()) {
-					throw new IllegalStateException(
-							"Todavia hay paquetes en el PickingPoint.");
+					throw new IllegalStateException(PAQUETES_EN_PICKING_POINT);
 
 				}
 				getListaPickingPoint().remove(i);
@@ -307,8 +314,7 @@ public class PickingPointSystem {
 			}
 		}
 		if (!encontrado) {
-			throw new IllegalArgumentException(
-					"No existe ningún PickingPoint con esa id.");
+			throw new IllegalArgumentException(PICKING_POINT_SIN_ID);
 		}
 	}
 }

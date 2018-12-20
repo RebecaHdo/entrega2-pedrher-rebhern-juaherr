@@ -12,10 +12,12 @@ import org.junit.Test;
 
 public class KioskTest {
 
-	// Test AsignaPaquete()
+	/*
+	 * Test AsignaPaquete()
+	 */
 
 	@Test
-	public void testAsignaPaqueteValidoVarios() {
+	public void testAsignaPaquete() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
 				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
 				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
@@ -54,10 +56,12 @@ public class KioskTest {
 
 	}
 
-	// Test SacaPaquete()
+	/*
+	 * Test SacaPaquete()
+	 */
 
 	@Test
-	public void testSacaPaqueteValido() {
+	public void testSacaPaquete() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
 				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
 				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
@@ -67,7 +71,7 @@ public class KioskTest {
 				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
 		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
 
-		Kiosk kiosk = new Kiosk("0", gps, horario, 2,true);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2, true);
 		Package paquete0 = new Package("0000000000", 0, true);// paquete pagado
 		Package paquete1 = new Package("0000000011", 0, false);// paquete no
 																// pagado
@@ -91,11 +95,15 @@ public class KioskTest {
 
 	@Test
 	public void testKioskStringGPSCoordinateLocalTimeArrayArrayIntBoolean() {
-//TODO como el de arriba	
+		// TODO como el de arriba
 	}
 
+	/*
+	 * Test getDinero()
+	 */
+
 	@Test
-	public void testGetDineroValido() {
+	public void testGetDinero() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
 				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
 				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
@@ -122,6 +130,9 @@ public class KioskTest {
 		assertEquals(3, kiosk.getDinero(), 0.01);
 	}
 
+	/*
+	 * Test dineroAmazingCo()
+	 */
 	@Test
 	public void testDineroAmazingCo() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -137,7 +148,6 @@ public class KioskTest {
 		Package paquete0 = new Package("0000000000", 1, false);// paquete no
 																// pagado
 
-
 		kiosk.asignaPaquete(paquete0);
 		kiosk.sacaPaquete(kiosk.locaclizaPaquete("0000000000"), LocalDate.now(),
 				0, LocalTime.of(8, 1));
@@ -145,8 +155,11 @@ public class KioskTest {
 		assertEquals(0, kiosk.getDinero(), 0.01);
 	}
 
+	/*
+	 * Test modificaNumTaquillas()
+	 */
 	@Test
-	public void testModificarNumTaquillasValido() {
+	public void testModificarNumTaquillas() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
 				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
 				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
@@ -155,16 +168,16 @@ public class KioskTest {
 				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
 				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
 		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
-		
+
 		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
 		kiosk.modificarNumTaquillas(1);
-		assertEquals(2,kiosk.getNumeroTaquillas());
-		
+		assertEquals(2, kiosk.getNumeroTaquillas());
+
 		kiosk.modificarNumTaquillas(-1);
-		assertEquals(1,kiosk.getNumeroTaquillas());
-		
+		assertEquals(1, kiosk.getNumeroTaquillas());
+
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testModificarNumTaquillasMenor1() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -175,7 +188,7 @@ public class KioskTest {
 				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
 				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
 		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
-		
+
 		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
 		kiosk.modificarNumTaquillas(-1);
 	}

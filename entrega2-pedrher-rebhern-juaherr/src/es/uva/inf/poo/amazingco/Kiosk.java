@@ -1,11 +1,24 @@
 package es.uva.inf.poo.amazingco;
 
 import java.time.LocalDate;
+
 import java.time.LocalTime;
 
 import es.uva.inf.poo.maps.GPSCoordinate;
-
+/**
+ * Almacena paquetes con pago a reembolso o no, calcula el dinero que hay
+ * que dar a AmazingCo por los paquetes a reembolso, perimite modificar el
+ * número de taquillas del Kiosk creado y sacar paquetes actualizando el
+ * estado del paquete a pagado si es necesario.
+ * 
+ * @author juaherr
+ * @author rebhern
+ * @author pedrher
+ * 
+ */
 public class Kiosk extends GroupablePickingPoint {
+//constantes de error
+	private static final String DEMASIADAS_TAQUILLAS_A_BORRAR="No se pueden borrar tantas taquillas.";
 
 	private double dinero = 0;
 
@@ -32,9 +45,9 @@ public class Kiosk extends GroupablePickingPoint {
 	}
 
 	/**
-	 * Devuelve el dinero que se le debe a AmazingCo
+	 * Devuelve el dinero que se le debe a AmazingCo.
 	 * 
-	 * @return dinero que se le debe a AmazingCO
+	 * @return dinero que se le debe a AmazingCO.
 	 */
 	public double getDinero() {
 		return dinero;
@@ -58,9 +71,9 @@ public class Kiosk extends GroupablePickingPoint {
 	 *                                  disponibles en el momento.
 	 */
 	public void modificarNumTaquillas(int modificacion) {
-		if ( -modificacion >= getNumeroTaquillasVacias()) {
+		if (-modificacion >= getNumeroTaquillasVacias()) {
 			throw new IllegalArgumentException(
-					"No se pueden borrar tantas taquillas.");
+					DEMASIADAS_TAQUILLAS_A_BORRAR);
 		}
 
 		setNumeroTaquillas(modificacion + getNumeroTaquillas());
