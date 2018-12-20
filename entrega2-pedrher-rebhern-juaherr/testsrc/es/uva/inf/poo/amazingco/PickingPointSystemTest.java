@@ -23,6 +23,7 @@ public class PickingPointSystemTest {
 		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
 		Kiosk kiosk = new Kiosk("0", gps, horario, 2);
 		PackageLocker locker = new PackageLocker("1", gps, horario, 2);
+		PostOffice office = new PostOffice("2",gps, horario);
 		PickingPointSystem pps = new PickingPointSystem();
 
 		pps.addPickingPoint(kiosk);
@@ -32,6 +33,10 @@ public class PickingPointSystemTest {
 		pps.addPickingPoint(locker);
 		assertEquals(2, pps.getTodosPickingPoint().length);
 		assertEquals(locker, pps.getPickingPoint("1"));
+		
+		pps.addPickingPoint(office);
+		assertEquals(3, pps.getTodosPickingPoint().length);
+		assertEquals(locker, pps.getPickingPoint("2"));
 
 	}
 

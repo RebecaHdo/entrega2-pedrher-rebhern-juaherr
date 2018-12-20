@@ -76,7 +76,6 @@ public abstract class PickingPoint {
 		this.horario = horario;
 		this.operativo = operativo;
 		this.numeroTaquillas = numeroTaquillas;
-		this.paquetes = new ArrayList<>(numeroTaquillas);
 		for (int i = 0; i < numeroTaquillas; i++) {
 			paquetes.add(null);
 		}
