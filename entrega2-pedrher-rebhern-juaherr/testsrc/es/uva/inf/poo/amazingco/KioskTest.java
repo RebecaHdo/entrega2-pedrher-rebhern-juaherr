@@ -136,8 +136,7 @@ public class KioskTest {
 		Kiosk kiosk = new Kiosk("0", gps, horario, 2);
 		Package paquete0 = new Package("0000000000", 1, false);// paquete no
 																// pagado
-		Package paquete1 = new Package("0000000011", 2, false);// paquete no
-																// pagado
+
 
 		kiosk.asignaPaquete(paquete0);
 		kiosk.sacaPaquete(kiosk.locaclizaPaquete("0000000000"), LocalDate.now(),

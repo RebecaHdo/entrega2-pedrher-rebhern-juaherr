@@ -308,6 +308,7 @@ public class PickingPointHubTest {
 		pph.borraPaquete(2);
 
 	}
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testBorraPaqueteFueraDeRengoAbajo() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -388,7 +389,7 @@ public class PickingPointHubTest {
 		assertTrue(pph.estaPuntoRecogida("locker2"));
 
 	}
-
+	@SuppressWarnings("unused")
 	@Test(expected = IllegalArgumentException.class)
 	public void testPickingPointHubSinOperatividadMenosDeDosPuntos() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -464,7 +465,7 @@ public class PickingPointHubTest {
 		assertTrue(pph.estaPuntoRecogida("locker2"));
 
 	}
-
+	@SuppressWarnings("unused")
 	@Test(expected = IllegalArgumentException.class)
 	public void testPickingPointHubConOperatividadMenosDeDosPuntos() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -531,6 +532,7 @@ public class PickingPointHubTest {
 		assertEquals(2, pph.getNumPuntos());
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testEstaPuntoRecogida() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
