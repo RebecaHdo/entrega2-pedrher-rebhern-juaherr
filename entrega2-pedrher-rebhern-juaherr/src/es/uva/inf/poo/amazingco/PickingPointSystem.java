@@ -269,7 +269,7 @@ public class PickingPointSystem {
 	public PickingPoint[] getPickingPointEnZonaValidas(GPSCoordinate ubicacion,
 			double radio, Package paquete) {
 
-		PickingPoint puntosEnZona[] = getPickingPointEnZona(ubicacion, radio);
+		PickingPoint[] puntosEnZona = getPickingPointEnZona(ubicacion, radio);
 		int contador = 0;
 		for (int i = 0; i < puntosEnZona.length; i++) {
 			if (puntosEnZona[i].getNumeroTaquillasVacias() != 0
