@@ -22,10 +22,14 @@ public class PackageLocker extends GroupablePickingPoint {
 			LocalTime[][] horario, int numeroTaquillas, boolean operativo) {
 		super(id, ubicacion, horario, numeroTaquillas, operativo);
 	}
-
+	/**
+	 *  El paquete no puede ser a contrarrembolso.
+	 *  
+	 * @see es.uva.inf.poo.amazingco.GroupablePickingPoint#paqueteValido(Package)
+	 */
 	@Override
 	public boolean paqueteValido(Package paquete) {
-		return !paquete.getPagado() && super.paqueteValido(paquete);
+		return paquete.getPagado() && super.paqueteValido(paquete);
 	}
 
 }

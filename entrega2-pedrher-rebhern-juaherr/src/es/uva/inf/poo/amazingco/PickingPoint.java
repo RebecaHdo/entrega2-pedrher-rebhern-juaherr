@@ -18,7 +18,7 @@ public abstract class PickingPoint {
 	private boolean operativo;
 	private static final String TAQUILLA_VACIA = "Esta taquilla está vacia.";
 	private static final String NUMERO_TAQUILLA_ERRONEO = "Número de taquilla erroneo. Debe estar comprendido entre 0 y numero de taquillas -1";
-			
+
 	/**
 	 * Inicializa el PickingPoint con la id, ubicación, horario semanal, número
 	 * de taquillas y operatividad dados.
@@ -249,9 +249,13 @@ public abstract class PickingPoint {
 	}
 
 	/**
+	 * Dice si un paquete puede ser guardado en el PickingPoint o no.
 	 * 
+	 * @throws IllegalArgumentException si el paquete es null.
+	 * @param paquete paquete a comprobar.
+	 * @return true si se puede guardar y false si no.
 	 */
-	public abstract boolean paqueteValido(Package paquete);
+	public abstract boolean paqueteValido(Package paquete) throws IllegalArgumentException;
 
 	/**
 	 * Asigna el paquete dado a una taquilla.
@@ -262,7 +266,6 @@ public abstract class PickingPoint {
 	 * @throws IllegalStateException    Si hay otro paquete con la misma id.
 	 */
 	public void asignaPaquete(Package paquete) {
-
 		if (paquete == null) {
 			throw new IllegalArgumentException("El paquete es null.");
 		}
@@ -277,6 +280,7 @@ public abstract class PickingPoint {
 			throw new IllegalArgumentException(
 					"Paquete no valido para el picking point.");
 		}
+
 		// comprueba que no haya un paquete con la misma id en el PackageLocker.
 
 		if (buscaPaquete(paquete.getId()) != -1) {
@@ -287,14 +291,18 @@ public abstract class PickingPoint {
 		int i = 0;
 		boolean colocado = false;
 		while (i < getNumeroTaquillas()) {
+
 			if (getPaquetesInterno().get(i) == null) {
+
 				getPaquetesInterno().set(i, paquete);
 				colocado = true;
 				i = getNumeroTaquillas();
 			} else {
 				i++;
 			}
+
 		}
+
 		if (!colocado) {
 			getPaquetesInterno().add(paquete);
 		}
@@ -313,8 +321,7 @@ public abstract class PickingPoint {
 	public Package getPaquete(int idTaquilla) {
 
 		if (idTaquilla < 0 || idTaquilla > getNumeroTaquillas() - 1) {
-			throw new IllegalArgumentException(
-					NUMERO_TAQUILLA_ERRONEO);
+			throw new IllegalArgumentException(NUMERO_TAQUILLA_ERRONEO);
 		}
 
 		if (getPaquetesInterno().get(idTaquilla) == null) {
@@ -334,8 +341,7 @@ public abstract class PickingPoint {
 	public void borraPaquete(int idTaquilla) {
 
 		if (idTaquilla < 0 || idTaquilla > getNumeroTaquillas() - 1) {
-			throw new IllegalArgumentException(
-					NUMERO_TAQUILLA_ERRONEO);
+			throw new IllegalArgumentException(NUMERO_TAQUILLA_ERRONEO);
 		}
 
 		if (getPaquetesInterno().get(idTaquilla) == null) {
@@ -371,8 +377,7 @@ public abstract class PickingPoint {
 					"El PickingPoint está cerrado a esta hora del dia.");
 		}
 		if (idTaquilla < 0 || idTaquilla > getNumeroTaquillas() - 1) {
-			throw new IllegalArgumentException(
-					NUMERO_TAQUILLA_ERRONEO);
+			throw new IllegalArgumentException(NUMERO_TAQUILLA_ERRONEO);
 		}
 		if (fechaSacada == null) {
 			throw new IllegalArgumentException("La fecha es nula.");
@@ -394,8 +399,7 @@ public abstract class PickingPoint {
 	 */
 	public void devuelvePaquete(int idTaquilla) {
 		if (idTaquilla < 0 || idTaquilla > getNumeroTaquillas() - 1) {
-			throw new IllegalArgumentException(
-					NUMERO_TAQUILLA_ERRONEO);
+			throw new IllegalArgumentException(NUMERO_TAQUILLA_ERRONEO);
 		}
 		if (getPaquetesInterno().get(idTaquilla) == null) {
 			throw new IllegalStateException(TAQUILLA_VACIA);

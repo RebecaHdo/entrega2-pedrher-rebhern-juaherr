@@ -7,7 +7,7 @@ import es.uva.inf.poo.maps.GPSCoordinate;
 
 public class PickingPointHub extends PickingPoint {
 
-	ArrayList<GroupablePickingPoint> listaPuntos = new ArrayList<>();
+	private ArrayList<GroupablePickingPoint> listaPuntos;
 
 	private int numPackageLockers = 0;
 
@@ -47,6 +47,10 @@ public class PickingPointHub extends PickingPoint {
 		for (int i = 0; i < puntosRecogida.length; i++) {
 			addPickingPoint(puntosRecogida[i]);
 		}
+
+		for (int i = 0; i < getNumeroTaquillas(); i++) {
+			getPaquetesInterno().add(null);
+		}
 	}
 
 	private ArrayList<GroupablePickingPoint> getListaPuntosInterna() {
@@ -76,8 +80,12 @@ public class PickingPointHub extends PickingPoint {
 	 * 
 	 * @param idPuntoRecogida Id del PickingPoint a comprobar.
 	 * @return true si está el PickingPoint y alse si no.
+	 * @throws IllegalArgumentException si la id es null.
 	 */
 	public boolean estaPuntoRecogida(String idPuntoRecogida) {
+		if (idPuntoRecogida == null) {
+			throw new IllegalArgumentException("La id es null.");
+		}
 		return (posPuntoRecogida(idPuntoRecogida) != -1);
 	}
 
@@ -300,9 +308,11 @@ public class PickingPointHub extends PickingPoint {
 			boolean kioskValido = false;
 			for (int i = getNumPackageLockers(); i < getListaPuntosInterna()
 					.size(); i++) {
+
 				if (getListaPuntosInterna().get(i)
 						.getNumeroTaquillasVacias() > 0) {
 					kioskValido = true;
+
 				}
 			}
 			if (!kioskValido) {
@@ -314,7 +324,8 @@ public class PickingPointHub extends PickingPoint {
 		super.asignaPaquete(paquete);
 		int i = 0;
 		while (i < getListaPuntosInterna().size()) {
-			if (getListaPuntosInterna().get(i).getNumeroTaquillasVacias() > 0) {
+			if (getListaPuntosInterna().get(i).getNumeroTaquillasVacias() > 0
+					&& getListaPuntosInterna().get(i).paqueteValido(paquete)) {
 				getListaPuntosInterna().get(i).asignaPaquete(paquete);
 				i = getListaPuntosInterna().size();
 			}
@@ -368,6 +379,8 @@ public class PickingPointHub extends PickingPoint {
 			if (getListaPuntosInterna().get(i).paqueteValido(paquete)) {
 				return true;
 			}
+
+			i++;
 		}
 		return false;
 	}

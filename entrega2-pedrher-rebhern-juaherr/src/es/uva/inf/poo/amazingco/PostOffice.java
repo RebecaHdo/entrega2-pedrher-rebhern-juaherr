@@ -52,7 +52,8 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#sacaPaquete(int, LocalDate)
 	 */
 	@Override
-	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada, int dia, LocalTime hora) {
+	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada, int dia,
+			LocalTime hora) {
 
 		Package paquete = getPaquetesInterno().get(idTaquilla);
 
@@ -146,7 +147,6 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 
 	}
 
-
 	@Override
 	protected boolean borrable() {
 		ArrayList<Package> paq = getPaquetes();
@@ -154,6 +154,12 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 
 	}
 
+	/**
+	 * Todos los paquetes son validos.
+	 * 
+	 * @see es.uva.inf.poo.amazingco.PickingPoint#PickingPoint(String,
+	 *      GPSCoordinate, LocalTime[][],int, boolean)
+	 */
 	@Override
 	public boolean paqueteValido(Package paquete) {
 		return true;
