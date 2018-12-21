@@ -7,7 +7,7 @@ import java.time.LocalTime;
 import es.uva.inf.poo.maps.GPSCoordinate;
 
 /**
- * GroupablePickingPoint que almacena paquetes con pago a reembolso o no.
+ * GroupablePickingPoint que almacena paquetes con pago a contrareembolso o no.
  * 
  * Calcula el dinero que hay que dar a AmazingCo por los paquetes a reembolso,
  * perimite modificar el número de taquillas del Kiosk creado y asignar, borrar,
