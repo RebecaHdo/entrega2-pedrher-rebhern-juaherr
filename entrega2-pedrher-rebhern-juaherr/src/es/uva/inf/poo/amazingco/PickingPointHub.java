@@ -5,6 +5,21 @@ import java.util.ArrayList;
 
 import es.uva.inf.poo.maps.GPSCoordinate;
 
+/**
+ * PickingPoint que almacena GroupablePickingPoints como el PackageLocker y el
+ * Kiosk.
+ * 
+ * 
+ * Permite añadir y borrar GroupablePickingPoints, tambien comprobar si uno de
+ * estos está en el hub y saber cuales y cuantos estan guardados.
+ * 
+ * Tambiem permite almacenar paquetes ya pagados o a contrarrembolso ( si hay algún kiosk libre).
+ * 
+ * @author juaherr
+ * @author rebhern
+ * @author pedrher
+ * 
+ */
 public class PickingPointHub extends PickingPoint {
 
 	private ArrayList<GroupablePickingPoint> listaPuntos;

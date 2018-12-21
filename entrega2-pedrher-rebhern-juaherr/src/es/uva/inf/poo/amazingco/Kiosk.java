@@ -7,10 +7,12 @@ import java.time.LocalTime;
 import es.uva.inf.poo.maps.GPSCoordinate;
 
 /**
- * Almacena paquetes con pago a reembolso o no, calcula el dinero que hay que
- * dar a AmazingCo por los paquetes a reembolso, perimite modificar el número de
- * taquillas del Kiosk creado y sacar paquetes actualizando el estado del
- * paquete a pagado si es necesario.
+ * GroupablePickingPoint que almacena paquetes con pago a reembolso o no.
+ * 
+ * Calcula el dinero que hay que dar a AmazingCo por los paquetes a reembolso,
+ * perimite modificar el número de taquillas del Kiosk creado y asignar, borrar,
+ * devolver y sacar paquetes actualizando el estado del paquete a pagado si es
+ * necesario.
  * 
  * @author juaherr
  * @author rebhern
@@ -34,8 +36,6 @@ public class Kiosk extends GroupablePickingPoint {
 	 *                        Esquema:
 	 *                        [[LocalTime(apertura),Localtime(cierre)],...,[LocalTime,Localtime]]
 	 * @param numeroTaquillas número de taquillas del PickingPoint.
-	 * @param operativo       indica si el PackageLocker está operativo desde el
-	 *                        momento creado o no.
 	 * @throws IllegalArgumentException si alguno de los argumentos es null.
 	 * @throws IllegalArgumentException si el horario no contiene los 7 dias de
 	 *                                  la semana, que uno de los dias sea null,
@@ -117,8 +117,11 @@ public class Kiosk extends GroupablePickingPoint {
 		setNumeroTaquillas(modificacion + getNumeroTaquillas());
 	}
 
-	/**
+	/*
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#sacaPaquete(int, LocalDate)
+	 */
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada, int dia,
