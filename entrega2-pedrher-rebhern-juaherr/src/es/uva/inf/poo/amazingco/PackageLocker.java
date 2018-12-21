@@ -4,10 +4,20 @@ import java.time.LocalTime;
 
 import es.uva.inf.poo.maps.GPSCoordinate;
 
+/**
+ * GroupablePickingPoint que almacena paquetes ya pagados.
+ * 
+ * Permite asignar, borrar, devolver y sacar paquetes actualizando el estado del
+ * paquete si es necesario.
+ * 
+ * @author juaherr
+ * @author rebhern
+ * @author pedrher
+ * 
+ */
 public class PackageLocker extends GroupablePickingPoint {
 	/**
-	 * hola
-	 * {@inheritDoc}
+	 * hola {@inheritDoc}
 	 * 
 	 */
 	public PackageLocker(String id, GPSCoordinate ubicacion,
