@@ -5,6 +5,15 @@ import java.util.ArrayList;
 
 import es.uva.inf.poo.maps.GPSCoordinate;
 
+/**
+ * Agrupacion de Kiosks y PackageLockers.
+ * 
+ * 
+ * @author juaherr
+ * @author rebhern
+ * @author pedro
+ *
+ */
 public abstract class GroupablePickingPoint extends PickingPoint {
 
 	/**
