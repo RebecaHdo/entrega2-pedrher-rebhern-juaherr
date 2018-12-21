@@ -23,19 +23,22 @@ public abstract class PickingPoint {
 	 * Inicializa el PickingPoint con la id, ubicación, horario semanal, número
 	 * de taquillas y operatividad dados.
 	 * 
-	 * @param id        id de la taquilla.
-	 * @param ubicacion ubicación de la taquilla.
-	 * @param horario   forma en la que se representa el día de la semana y la
-	 *                  hora de apertura y cierre de cada día. Esquema:
-	 *                  [[LocalTime(apertura),Localtime(cierre)],...,[LocalTime,Localtime]]
-	 * @param operativo indica si el PackageLocker está operativo desde el
-	 *                  momento creado o no.
+	 * @param id              id de la taquilla.
+	 * @param ubicacion       ubicación de la taquilla.
+	 * @param horario         forma en la que se representa el día de la semana
+	 *                        y la hora de apertura y cierre de cada día.
+	 *                        Esquema:
+	 *                        [[LocalTime(apertura),Localtime(cierre)],...,[LocalTime,Localtime]]
+	 * @param numeroTaquillas número de taquillas del PickingPoint.
+	 * @param operativo       indica si el PackageLocker está operativo desde el
+	 *                        momento creado o no.
 	 * @throws IllegalArgumentException si alguno de los argumentos es null.
 	 * @throws IllegalArgumentException si el horario no contiene los 7 dias de
 	 *                                  la semana, que uno de los dias sea null,
 	 *                                  que un dia no tenga exactamente 2 horas
 	 *                                  o que la hora de apertura sea mayor que
 	 *                                  la hora de cierre.
+	 * @throws IllegalArgumentException si el numeroTaquillas es menor que 0.
 	 */
 	public PickingPoint(String id, GPSCoordinate ubicacion,
 			LocalTime[][] horario, int numeroTaquillas, boolean operativo) {
@@ -85,11 +88,13 @@ public abstract class PickingPoint {
 	 * Inicializa el PickingPoint operativo con la id, ubicación, horario
 	 * semanal y número de taquillas.
 	 * 
-	 * @param id        id de la taquilla.
-	 * @param ubicacion ubicación de la taquilla.
-	 * @param horario   forma en la que se representa el día de la semana y la
-	 *                  hora de apertura y cierre de cada día. Esquema:
-	 *                  [[LocalTime(apertura),Localtime(cierre)],...,[LocalTime,Localtime]]
+	 * @param id              id de la taquilla.
+	 * @param ubicacion       ubicación de la taquilla.
+	 * @param horario         forma en la que se representa el día de la semana
+	 *                        y la hora de apertura y cierre de cada día.
+	 *                        Esquema:
+	 *                        [[LocalTime(apertura),Localtime(cierre)],...,[LocalTime,Localtime]]
+	 * @param numeroTaquillas número de taquillas del PickingPoint.
 	 * @throws IllegalArgumentException si alguno de los argumentos es null.
 	 * @throws IllegalArgumentException si el horario no contiene los 7 dias de
 	 *                                  la semana, que uno de los dias sea null,
@@ -150,7 +155,12 @@ public abstract class PickingPoint {
 		return paquetes;
 	}
 
-	protected abstract boolean borrable();
+	/**
+	 * Comprueba si un PickingPoint es borrable.
+	 * 
+	 * @return true si es borrable.
+	 */
+	public abstract boolean borrable();
 
 	/**
 	 * Devuelve la id del PackageLocker.

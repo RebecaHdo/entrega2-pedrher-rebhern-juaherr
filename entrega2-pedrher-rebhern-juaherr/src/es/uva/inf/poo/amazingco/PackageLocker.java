@@ -6,11 +6,9 @@ import es.uva.inf.poo.maps.GPSCoordinate;
 
 public class PackageLocker extends GroupablePickingPoint {
 	/**
+	 * hola
+	 * {@inheritDoc}
 	 * 
-	 * @param id
-	 * @param ubicacion
-	 * @param horario
-	 * @param numeroTaquillas
 	 */
 	public PackageLocker(String id, GPSCoordinate ubicacion,
 			LocalTime[][] horario, int numeroTaquillas) {
@@ -22,9 +20,10 @@ public class PackageLocker extends GroupablePickingPoint {
 			LocalTime[][] horario, int numeroTaquillas, boolean operativo) {
 		super(id, ubicacion, horario, numeroTaquillas, operativo);
 	}
+
 	/**
-	 *  El paquete no puede ser a contrarrembolso.
-	 *  
+	 * El paquete no puede ser a contrarrembolso.
+	 * 
 	 * @see es.uva.inf.poo.amazingco.GroupablePickingPoint#paqueteValido(Package)
 	 */
 	@Override

@@ -147,8 +147,16 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 
 	}
 
+	/**
+	 * Comprueba si un PostOffice es borrable.
+	 * 
+	 * Es borrable si no contiene ningún paquete.
+	 * 
+	 * @return true si no contiene ningún paquete.
+	 * @see es.uva.inf.poo.amazingco.PickingPoint#borrable()
+	 */
 	@Override
-	protected boolean borrable() {
+	public boolean borrable() {
 		ArrayList<Package> paq = getPaquetes();
 		return paq.isEmpty();
 

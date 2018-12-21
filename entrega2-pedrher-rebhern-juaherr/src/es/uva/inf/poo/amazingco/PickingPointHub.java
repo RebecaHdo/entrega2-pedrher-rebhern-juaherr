@@ -12,11 +12,27 @@ public class PickingPointHub extends PickingPoint {
 	private int numPackageLockers = 0;
 
 	/**
+	 * Inicializa el PickingPointHub con la id, ubicación, horario semanal y
+	 * GroupablePoints que se quieran añadir.
 	 * 
-	 * @param id
-	 * @param ubicacion
-	 * @param horario
-	 * @param puntosRecogida
+	 * @param id             id de la taquilla.
+	 * @param ubicacion      ubicación de la taquilla.
+	 * @param horario        forma en la que se representa el día de la semana y
+	 *                       la hora de apertura y cierre de cada día. Esquema:
+	 *                       [[LocalTime(apertura),Localtime(cierre)],...,[LocalTime,Localtime]]
+	 *                       momento creado o no.
+	 * @param puntosRecogida GroupablePickingPoints que se quieren guardar.
+	 * 
+	 * @throws IllegalArgumentException si alguno de los argumentos es null.
+	 * @throws IllegalArgumentException si el horario no contiene los 7 dias de
+	 *                                  la semana, que uno de los dias sea null,
+	 *                                  que un dia no tenga exactamente 2 horas
+	 *                                  o que la hora de apertura sea mayor que
+	 *                                  la hora de cierre.
+	 * @see es.uva.inf.poo.amazingco.PickingPoint#PickingPoint(String,
+	 *      GPSCoordinate, LocalTime[][],int)
+	 * @see es.uva.inf.poo.amazingco.GroupablePickingPoint
+	 * 
 	 */
 	public PickingPointHub(String id, GPSCoordinate ubicacion,
 			LocalTime[][] horario, GroupablePickingPoint[] puntosRecogida) {
@@ -25,11 +41,27 @@ public class PickingPointHub extends PickingPoint {
 
 	/**
 	 * 
-	 * @param id
-	 * @param ubicacion
-	 * @param horario
-	 * @param puntosRecogida
-	 * @param operativo
+	 * Inicializa el PickingPointHub con la id, ubicación, horario semanal,
+	 * GroupablePoints que se quieran añadir y operatividad dados.
+	 * 
+	 * @param id             id de la taquilla.
+	 * @param ubicacion      ubicación de la taquilla.
+	 * @param horario        forma en la que se representa el día de la semana y
+	 *                       la hora de apertura y cierre de cada día. Esquema:
+	 *                       [[LocalTime(apertura),Localtime(cierre)],...,[LocalTime,Localtime]]
+	 * @param operativo      indica si el PackageLocker está operativo desde el
+	 *                       momento creado o no.
+	 * @param puntosRecogida GroupablePickingPoints que se quieren guardar.
+	 * 
+	 * @throws IllegalArgumentException si alguno de los argumentos es null.
+	 * @throws IllegalArgumentException si el horario no contiene los 7 dias de
+	 *                                  la semana, que uno de los dias sea null,
+	 *                                  que un dia no tenga exactamente 2 horas
+	 *                                  o que la hora de apertura sea mayor que
+	 *                                  la hora de cierre.
+	 * @see es.uva.inf.poo.amazingco.PickingPoint#PickingPoint(String,
+	 *      GPSCoordinate, LocalTime[][],int, boolean)
+	 * @see es.uva.inf.poo.amazingco.GroupablePickingPoint
 	 */
 	public PickingPointHub(String id, GPSCoordinate ubicacion,
 			LocalTime[][] horario, GroupablePickingPoint[] puntosRecogida,
@@ -75,7 +107,7 @@ public class PickingPointHub extends PickingPoint {
 	 * Comprueba si un PickingPoint esta en el hub mediante su Id.
 	 * 
 	 * @param idPuntoRecogida Id del PickingPoint a comprobar.
-	 * @return true si está el PickingPoint y alse si no.
+	 * @return true si está el PickingPoint y flse si no.
 	 * @throws IllegalArgumentException si la id es null.
 	 */
 	public boolean estaPuntoRecogida(String idPuntoRecogida) {
@@ -143,7 +175,7 @@ public class PickingPointHub extends PickingPoint {
 	/**
 	 * Borra un GroupablePickingPoint mediente Id siempre que sea posible.
 	 * 
-	 * @param puntoRecogida Id del punto a borrar.
+	 * @param idPuntoRecogida Id del punto a borrar.
 	 * 
 	 * @throws IllegalStateException    si al borrar ese punto el Hub se quedára
 	 *                                  con menos de dos.
@@ -230,12 +262,18 @@ public class PickingPointHub extends PickingPoint {
 	}
 
 	/**
+	 * 
+	 * Comprueba si un PickingPointHub es borrable o no.
+	 * 
 	 * Es borrable si todos los puntos del Hub son borrables.
 	 * 
+	 * @return true si todos los puntos del Hub son borrables.
+	 * 
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#borrable()
+	 * @see es.uva.inf.poo.amazingco.GroupablePickingPoint#borrable()
 	 */
 	@Override
-	protected boolean borrable() {
+	public boolean borrable() {
 		for (int i = 0; i < getListaPuntosInterna().size(); i++) {
 
 			if (!getListaPuntosInterna().get(i).borrable()) {

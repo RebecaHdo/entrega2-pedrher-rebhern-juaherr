@@ -8,8 +8,26 @@ import es.uva.inf.poo.maps.GPSCoordinate;
 public abstract class GroupablePickingPoint extends PickingPoint {
 
 	/**
+	 * Inicializa el GroupablePickingPoint con la id, ubicación, horario semanal
+	 * y número de taquillas.
+	 * 
+	 * @param id              id de la taquilla.
+	 * @param ubicacion       ubicación de la taquilla.
+	 * @param horario         forma en la que se representa el día de la semana
+	 *                        y la hora de apertura y cierre de cada día.
+	 *                        Esquema:
+	 *                        [[LocalTime(apertura),Localtime(cierre)],...,[LocalTime,Localtime]]
+	 * @param numeroTaquillas número de taquillas del PickingPoint.
+	 * 
+	 * @throws IllegalArgumentException si alguno de los argumentos es null.
+	 * @throws IllegalArgumentException si el horario no contiene los 7 dias de
+	 *                                  la semana, que uno de los dias sea null,
+	 *                                  que un dia no tenga exactamente 2 horas
+	 *                                  o que la hora de apertura sea mayor que
+	 *                                  la hora de cierre.
+	 * @throws IllegalArgumentException si el numeroTaquillas es menor que 0.
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#PickingPoint(String,
-	 *      GPSCoordinate, LocalTime[][],int)
+	 *      GPSCoordinate, LocalTime[][],int, boolean)
 	 */
 	public GroupablePickingPoint(String id, GPSCoordinate ubicacion,
 			LocalTime[][] horario, int numeroTaquillas) {
@@ -17,8 +35,25 @@ public abstract class GroupablePickingPoint extends PickingPoint {
 	}
 
 	/**
-	 * El paquete no puede ser certificado.
+	 * Inicializa el GroupablePickingPoint con la id, ubicación, horario
+	 * semanal, número de taquillas y operatividad dados.
 	 * 
+	 * @param id              id de la taquilla.
+	 * @param ubicacion       ubicación de la taquilla.
+	 * @param horario         forma en la que se representa el día de la semana
+	 *                        y la hora de apertura y cierre de cada día.
+	 *                        Esquema:
+	 *                        [[LocalTime(apertura),Localtime(cierre)],...,[LocalTime,Localtime]]
+	 * @param numeroTaquillas número de taquillas del PickingPoint.
+	 * @param operativo       indica si el PackageLocker está operativo desde el
+	 *                        momento creado o no.
+	 * @throws IllegalArgumentException si alguno de los argumentos es null.
+	 * @throws IllegalArgumentException si el horario no contiene los 7 dias de
+	 *                                  la semana, que uno de los dias sea null,
+	 *                                  que un dia no tenga exactamente 2 horas
+	 *                                  o que la hora de apertura sea mayor que
+	 *                                  la hora de cierre.
+	 * @throws IllegalArgumentException si el numeroTaquillas es menor que 0.
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#PickingPoint(String,
 	 *      GPSCoordinate, LocalTime[][],int, boolean)
 	 */
@@ -40,8 +75,16 @@ public abstract class GroupablePickingPoint extends PickingPoint {
 		return !paquete.getCertificado();
 	}
 
+	/**
+	 * Comprueba si un GroupablePickingPoint es borrable o no.
+	 * 
+	 * Es borrable si no contiene ningún paquete.
+	 * 
+	 * @return true si no contiene ningún paquete.
+	 * @see es.uva.inf.poo.amazingco.PickingPoint#borrable()
+	 */
 	@Override
-	protected boolean borrable() {
+	public boolean borrable() {
 		ArrayList<Package> paq = getPaquetes();
 		return paq.isEmpty();
 

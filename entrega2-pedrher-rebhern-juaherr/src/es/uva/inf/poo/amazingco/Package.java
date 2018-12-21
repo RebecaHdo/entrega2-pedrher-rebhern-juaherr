@@ -287,6 +287,7 @@ public class Package {
 	 * Cambia el estado del paquete a recogido en caso de que esté en el plazo
 	 * de entrega y siga en el taquilla.
 	 * 
+	 * @param fecha fecha en la que se quiere recoger el paquete.
 	 * @throws IllegalStateException si el paquete se intenta recoger pero su
 	 *                               estado es 1 (recogido) o 2 (devuelto).
 	 * @throws IllegalStateException si {@code fechaEnPlazo == False}.
@@ -344,6 +345,7 @@ public class Package {
 		return false;
 
 	}
+
 	/**
 	 * @see java.lang.String#toString()
 	 */
