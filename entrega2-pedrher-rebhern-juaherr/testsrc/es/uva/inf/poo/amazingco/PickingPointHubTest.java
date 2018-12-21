@@ -160,13 +160,13 @@ public class PickingPointHubTest {
 		pph.asignaPaquete(paquete2);
 
 		assertEquals(paquete,
-				pph.getPaquete(pph.locaclizaPaquete("0000000000")));
+				pph.getPaquete(pph.localizaPaquete("0000000000")));
 		assertEquals(paquete2,
-				pph.getPaquete(pph.locaclizaPaquete("0000000011")));
+				pph.getPaquete(pph.localizaPaquete("0000000011")));
 		assertEquals(paquete2,
-				kiosk.getPaquete(kiosk.locaclizaPaquete("0000000011")));
+				kiosk.getPaquete(kiosk.localizaPaquete("0000000011")));
 		assertEquals(paquete,
-				locker.getPaquete(locker.locaclizaPaquete("0000000000")));
+				locker.getPaquete(locker.localizaPaquete("0000000000")));
 		assertEquals(2, pph.getNumeroTaquillasLlenas());
 		assertEquals(0, pph.getNumeroTaquillasVacias());
 	}
@@ -416,11 +416,11 @@ public class PickingPointHubTest {
 		pph.asignaPaquete(paquete);
 		pph.asignaPaquete(paquete2);
 
-		pph.borraPaquete(pph.locaclizaPaquete("0000000000"));
+		pph.borraPaquete(pph.localizaPaquete("0000000000"));
 		assertEquals(paquete2,
-				pph.getPaquete(pph.locaclizaPaquete("0000000011")));
+				pph.getPaquete(pph.localizaPaquete("0000000011")));
 		assertEquals(paquete2,
-				kiosk.getPaquete(kiosk.locaclizaPaquete("0000000011")));
+				kiosk.getPaquete(kiosk.localizaPaquete("0000000011")));
 
 		assertEquals(1, pph.getNumeroTaquillasLlenas());
 		assertEquals(1, pph.getNumeroTaquillasVacias());
@@ -1403,7 +1403,7 @@ public class PickingPointHubTest {
 		PickingPointHub pph = new PickingPointHub("0", gps, horario, puntos);
 
 		pph.asignaPaquete(paquete);
-		assertEquals(0, pph.locaclizaPaquete("0000000000"));
+		assertEquals(0, pph.localizaPaquete("0000000000"));
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -1424,7 +1424,7 @@ public class PickingPointHubTest {
 
 		PickingPointHub pph = new PickingPointHub("0", gps, horario, puntos);
 
-		pph.locaclizaPaquete(null);
+		pph.localizaPaquete(null);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -1445,6 +1445,6 @@ public class PickingPointHubTest {
 
 		PickingPointHub pph = new PickingPointHub("0", gps, horario, puntos);
 
-		pph.locaclizaPaquete("0000000000");
+		pph.localizaPaquete("0000000000");
 	}
 }

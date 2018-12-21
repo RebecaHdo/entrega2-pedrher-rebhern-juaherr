@@ -255,7 +255,7 @@ public abstract class PickingPoint {
 	 * @throws IllegalArgumentException Si no existe el paquete en el
 	 *                                  PickingPoint indicado.
 	 */
-	public int locaclizaPaquete(String idPaquete) {
+	public int localizaPaquete(String idPaquete) {
 		if (idPaquete == null) {
 			throw new IllegalArgumentException("La id es null.");
 		}
@@ -277,6 +277,7 @@ public abstract class PickingPoint {
 	 * @return true si se puede guardar y false si no.
 	 */
 	public abstract boolean paqueteValido(Package paquete);
+	//TODO hacer si no se llena el coverage sino sudar
 
 	/**
 	 * Asigna el paquete dado a una taquilla.

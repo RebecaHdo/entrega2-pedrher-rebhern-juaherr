@@ -410,7 +410,7 @@ public class PickingPointHub extends PickingPoint {
 			if (getListaPuntosInterna().get(i)
 					.buscaPaquete(paquete.getId()) > -1) {
 				int pos = getListaPuntosInterna().get(i)
-						.locaclizaPaquete(paquete.getId());
+						.localizaPaquete(paquete.getId());
 				getListaPuntosInterna().get(i).borraPaquete(pos);
 				i = getListaPuntosInterna().size();
 			}

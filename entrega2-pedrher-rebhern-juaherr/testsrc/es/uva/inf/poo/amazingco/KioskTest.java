@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import es.uva.inf.poo.amazingco.Kiosk;
 import es.uva.inf.poo.maps.GPSCoordinate;
@@ -13,81 +11,6 @@ import es.uva.inf.poo.maps.GPSCoordinate;
 import org.junit.Test;
 
 public class KioskTest {
-
-	/*
-	 * Test AsignaPaquete()
-	 */
-
-	@Test
-	public void testAsignaPaquete() {
-		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
-				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
-				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
-				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
-				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
-				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
-				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
-		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
-		Kiosk kiosk = new Kiosk("0", gps, horario, 2);
-		Package paquete0 = new Package("0000000000", 0, true);
-		Package paquete1 = new Package("0000000011", 0, false);
-		kiosk.asignaPaquete(paquete0);
-		kiosk.asignaPaquete(paquete1);
-		assertEquals(paquete0,
-				kiosk.getPaquete(kiosk.locaclizaPaquete("0000000000")));
-		assertEquals(paquete1,
-				kiosk.getPaquete(kiosk.locaclizaPaquete("0000000011")));
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testAsignaPaqueteCertificado() {
-		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
-				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
-				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
-				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
-				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
-				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
-				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
-		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
-		String[] dni = { "1234" };
-
-		Kiosk kiosk = new Kiosk("0", gps, horario, 2);
-		Package paquete0 = new Package("0000000000", 0, false, dni);// paquete
-																	// certificado
-		kiosk.asignaPaquete(paquete0);
-
-	}
-
-	/*
-	 * Test SacaPaquete()
-	 */
-
-	@Test
-	public void testSacaPaquete() {
-		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
-				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
-				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
-				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
-				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
-				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
-				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
-		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
-
-		Kiosk kiosk = new Kiosk("0", gps, horario, 2, true);
-		Package paquete0 = new Package("0000000000", 0, true);// paquete pagado
-		Package paquete1 = new Package("0000000011", 0, false);// paquete no
-																// pagado
-		kiosk.asignaPaquete(paquete0);
-		kiosk.asignaPaquete(paquete1);
-		kiosk.sacaPaquete(kiosk.locaclizaPaquete("0000000000"), LocalDate.now(),
-				0, LocalTime.of(8, 1));
-		kiosk.sacaPaquete(kiosk.locaclizaPaquete("0000000011"), LocalDate.now(),
-				0, LocalTime.of(8, 1));
-
-		assertEquals(1, paquete0.getEstado());
-		assertEquals(1, paquete1.getEstado());
-	}
-
 	/*
 	 * Test constructores.
 	 */
@@ -698,14 +621,282 @@ public class KioskTest {
 																// pagado
 
 		kiosk.asignaPaquete(paquete0);
-		kiosk.sacaPaquete(kiosk.locaclizaPaquete("0000000000"), LocalDate.now(),
+		kiosk.sacaPaquete(kiosk.localizaPaquete("0000000000"), LocalDate.now(),
 				0, LocalTime.of(8, 1));
 		assertEquals(1, kiosk.getDinero(), 0.01);
 
 		kiosk.asignaPaquete(paquete1);
-		kiosk.sacaPaquete(kiosk.locaclizaPaquete("0000000011"), LocalDate.now(),
+		kiosk.sacaPaquete(kiosk.localizaPaquete("0000000011"), LocalDate.now(),
 				0, LocalTime.of(8, 1));
 		assertEquals(3, kiosk.getDinero(), 0.01);
+	}
+
+	/*
+	 * Test AsignaPaquete()
+	 */
+
+	@Test
+	public void testAsignaPaquete() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2);
+		Package paquete0 = new Package("0000000000", 0, true);
+		Package paquete1 = new Package("0000000011", 0, false);
+		kiosk.asignaPaquete(paquete0);
+		kiosk.asignaPaquete(paquete1);
+		assertEquals(paquete0,
+				kiosk.getPaquete(kiosk.localizaPaquete("0000000000")));
+		assertEquals(paquete1,
+				kiosk.getPaquete(kiosk.localizaPaquete("0000000011")));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testAsignaPaqueteCertificado() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		String[] dni = { "1234" };
+
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2);
+		Package paquete0 = new Package("0000000000", 0, false, dni);// paquete
+																	// certificado
+		kiosk.asignaPaquete(paquete0);
+
+	}
+
+	/*
+	 * Test SacaPaquete()
+	 */
+
+	@Test
+	public void testSacaPaquete() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2, true);
+		Package paquete0 = new Package("0000000000", 0, true);// paquete pagado
+		Package paquete1 = new Package("0000000011", 0, false);// paquete no
+																// pagado
+		kiosk.asignaPaquete(paquete0);
+		kiosk.asignaPaquete(paquete1);
+		kiosk.sacaPaquete(kiosk.localizaPaquete("0000000000"), LocalDate.now(),
+				0, LocalTime.of(8, 1));
+		kiosk.sacaPaquete(kiosk.localizaPaquete("0000000011"), LocalDate.now(),
+				0, LocalTime.of(8, 1));
+
+		assertEquals(1, paquete0.getEstado());
+		assertEquals(1, paquete1.getEstado());
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void testSacaPaquetePackageLockerFueraDeServicio() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2, false);
+		Package paquete0 = new Package("0000000000", 0, true);
+		kiosk.asignaPaquete(paquete0);
+		kiosk.sacaPaquete(kiosk.localizaPaquete("0000000011"), LocalDate.now(),
+				0, LocalTime.of(8, 1));
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSacaPaqueteTaquillaMenorCero() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2, true);
+		Package paquete0 = new Package("0000000000", 0, true);// paquete pagado
+		kiosk.asignaPaquete(paquete0);
+		kiosk.sacaPaquete(-1, LocalDate.now(), 0, LocalTime.of(8, 1));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSacaPaqueteMayorNumeroTaquillas() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2, true);
+		Package paquete0 = new Package("0000000000", 0, true);// paquete pagado
+		kiosk.asignaPaquete(paquete0);
+		kiosk.sacaPaquete(kiosk.getNumeroTaquillas() + 1, LocalDate.now(), 0,
+				LocalTime.of(8, 1));
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void testSacaPaqueteTaquillaVacia() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2, true);
+		kiosk.sacaPaquete(0, LocalDate.now(), 0, LocalTime.of(8, 1));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSacaPaqueteFechaNull() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2, true);
+		Package paquete0 = new Package("0000000000", 0, true);// paquete pagado
+		kiosk.asignaPaquete(paquete0);
+		kiosk.sacaPaquete(kiosk.localizaPaquete("0000000011"), null, 1,
+				LocalTime.of(8, 1));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSacaPaqueteHoraNull() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2, true);
+		Package paquete0 = new Package("0000000000", 0, true);// paquete pagado
+		kiosk.asignaPaquete(paquete0);
+		kiosk.sacaPaquete(kiosk.localizaPaquete("0000000000"), LocalDate.now(),
+				1, null);
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void testSacaPaqueteFechaFueraDePlazo() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2, true);
+		Package paquete0 = new Package("0000000000", 0, true);// paquete pagado
+		kiosk.asignaPaquete(paquete0);
+		kiosk.sacaPaquete(kiosk.localizaPaquete("0000000000"),
+				LocalDate.now().plusDays(Package.getDiasMaximos() + 1), 0,
+				LocalTime.of(8, 1));
+
+	}
+
+	/*
+	 * Test devuelvePaquete().
+	 */
+	@Test
+	public void testDevuelvePaquete() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2, true);
+		Package paquete0 = new Package("0000000000", 0, true);// paquete pagado
+		Package paquete1 = new Package("0000000011", 0, false);// paquete no
+																// pagado
+		kiosk.asignaPaquete(paquete0);
+		kiosk.asignaPaquete(paquete1);
+		kiosk.devuelvePaquete(kiosk.localizaPaquete(paquete0.getId()));
+		kiosk.devuelvePaquete(kiosk.localizaPaquete(paquete1.getId()));
+
+		assertEquals(2, paquete0.getEstado());
+		assertEquals(2, paquete1.getEstado());
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testDevuelvePaqueteMenorCero() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2, true);
+		Package paquete0 = new Package("0000000000", 0, true);// paquete pagado
+		kiosk.asignaPaquete(paquete0);
+		kiosk.devuelvePaquete(-1);
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testDevuelvePaqueteMayorNumeroTaquillas() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2, true);
+		Package paquete0 = new Package("0000000000", 0, true);// paquete pagado
+		kiosk.asignaPaquete(paquete0);
+		kiosk.devuelvePaquete(kiosk.getNumeroTaquillas() + 1);
+
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void testDevuelvePaqueteTaquillaVacia() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2, true);
+		kiosk.devuelvePaquete(0);
+
 	}
 
 	/*
@@ -727,7 +918,7 @@ public class KioskTest {
 																// pagado
 
 		kiosk.asignaPaquete(paquete0);
-		kiosk.sacaPaquete(kiosk.locaclizaPaquete("0000000000"), LocalDate.now(),
+		kiosk.sacaPaquete(kiosk.localizaPaquete("0000000000"), LocalDate.now(),
 				0, LocalTime.of(8, 1));
 		kiosk.dineroAmazingCo();
 		assertEquals(0, kiosk.getDinero(), 0.01);
@@ -770,7 +961,7 @@ public class KioskTest {
 		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
 		kiosk.modificarNumTaquillas(-1);
 	}
-	
+
 	@Test
 	public void testGetOperativo() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -783,12 +974,11 @@ public class KioskTest {
 		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
 
 		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
-		Kiosk kiosk1 = new Kiosk("1",gps, horario,1,false);
+		Kiosk kiosk1 = new Kiosk("1", gps, horario, 1, false);
 		assertTrue(kiosk.getOperativo());
 		assertFalse(kiosk1.getOperativo());
 	}
-	
-	
+
 	@Test
 	public void testgetNumeroTaquillas() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -801,11 +991,11 @@ public class KioskTest {
 		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
 
 		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
-		
-		assertEquals(1,kiosk.getNumeroTaquillas());
-		
+
+		assertEquals(1, kiosk.getNumeroTaquillas());
+
 	}
-	
+
 	@Test
 	public void testgetNumeroTaquillasLlenas() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -818,14 +1008,14 @@ public class KioskTest {
 		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
 
 		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
-		Kiosk kiosk1 = new Kiosk("1",gps, horario,1);
+		Kiosk kiosk1 = new Kiosk("1", gps, horario, 1);
 		Package paquete0 = new Package("0000000000", 0, true);
 		kiosk1.asignaPaquete(paquete0);
 
-		assertEquals(0,kiosk.getNumeroTaquillasLlenas());
-		assertEquals(1,kiosk1.getNumeroTaquillasLlenas());
+		assertEquals(0, kiosk.getNumeroTaquillasLlenas());
+		assertEquals(1, kiosk1.getNumeroTaquillasLlenas());
 	}
-	
+
 	@Test
 	public void testgetNumeroTaquillasVacias() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -838,13 +1028,14 @@ public class KioskTest {
 		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
 
 		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
-		Kiosk kiosk1 = new Kiosk("1",gps, horario,1);
+		Kiosk kiosk1 = new Kiosk("1", gps, horario, 1);
 		Package paquete0 = new Package("0000000000", 0, true);
 		kiosk1.asignaPaquete(paquete0);
 
-		assertEquals(1,kiosk.getNumeroTaquillasVacias());
-		assertEquals(0,kiosk1.getNumeroTaquillasVacias());		
+		assertEquals(1, kiosk.getNumeroTaquillasVacias());
+		assertEquals(0, kiosk1.getNumeroTaquillasVacias());
 	}
+
 	@Test
 	public void testgetPaquetes() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -864,9 +1055,9 @@ public class KioskTest {
 		kiosk.asignaPaquete(paquete1);
 		assertTrue(kiosk.getPaquetes().contains(paquete0));
 		assertTrue(kiosk.getPaquetes().contains(paquete1));
-		
+
 	}
-	
+
 	@Test
 	public void testBorrable() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -879,14 +1070,14 @@ public class KioskTest {
 		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
 
 		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
-		Kiosk kiosk1 = new Kiosk("1",gps, horario,1);
+		Kiosk kiosk1 = new Kiosk("1", gps, horario, 1);
 		Package paquete0 = new Package("0000000000", 0, true);
 		kiosk1.asignaPaquete(paquete0);
-		
+
 		assertTrue(kiosk.borrable());
 		assertFalse(kiosk1.borrable());
 	}
-	
+
 	@Test
 	public void testGetHorario() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -899,10 +1090,11 @@ public class KioskTest {
 		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
 
 		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
-				
-		assertArrayEquals(horario,kiosk.getHorario());
-		
+
+		assertArrayEquals(horario, kiosk.getHorario());
+
 	}
+
 	@Test
 	public void testGetUbicacion() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -915,10 +1107,26 @@ public class KioskTest {
 		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
 
 		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
-				
-		assertEquals(gps,kiosk.getUbicacion());
+
+		assertEquals(gps, kiosk.getUbicacion());
 	}
-	
+
+	@Test
+	public void testGetId() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+
+		assertEquals("0", kiosk.getId());
+	}
+
 	@Test
 	public void testOperatividad() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -931,14 +1139,125 @@ public class KioskTest {
 		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
 
 		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
-		Kiosk kiosk1 = new Kiosk("1",gps, horario,1,false);
-		
+		Kiosk kiosk1 = new Kiosk("1", gps, horario, 1, false);
+
 		kiosk.operatividad();
 		kiosk1.operatividad();
-		
+
 		assertFalse(kiosk.getOperativo());
-		assertTrue(kiosk1.getOperativo());	
-		
+		assertTrue(kiosk1.getOperativo());
+
+	}
+
+	@Test
+	public void testLocalizaPaquete() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+		Package paquete = new Package("0000000000", 0, true);
+
+		kiosk.asignaPaquete(paquete);
+		assertEquals(0, kiosk.localizaPaquete("0000000000"));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testLocalizaPaqueteIdNull() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		kiosk.localizaPaquete(null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testLocalizaPaqueteKioskVacio() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		kiosk.localizaPaquete("0000000000");
+	}
+
+	@Test
+	public void testBorraPaquete() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		Package paquete = new Package("0000000000", 0, true);
+		Package paquete2 = new Package("0000000011", 0, false);
+
+		kiosk.asignaPaquete(paquete);
+		kiosk.asignaPaquete(paquete2);
+
+		kiosk.borraPaquete(kiosk.localizaPaquete("0000000000"));
+		assertEquals(paquete2,
+				kiosk.getPaquete(kiosk.localizaPaquete("0000000011")));
+
+		assertEquals(1, kiosk.getNumeroTaquillasLlenas());
+		assertEquals(1, kiosk.getNumeroTaquillasVacias());
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testBorraPaqueteFueraDeRangoArriba() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 1);
+
+		Package paquete = new Package("0000000000", 0, true);
+
+		kiosk.asignaPaquete(paquete);
+		kiosk.borraPaquete(2);
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testBorraPaqueteFueraDeRengoAbajo() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 1);
+		Package paquete = new Package("0000000000", 0, true);
+
+		kiosk.asignaPaquete(paquete);
+		kiosk.borraPaquete(-1);
+
 	}
 
 }
