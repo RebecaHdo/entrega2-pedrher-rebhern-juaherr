@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import es.uva.inf.poo.amazingco.Kiosk;
 import es.uva.inf.poo.maps.GPSCoordinate;
@@ -90,7 +92,7 @@ public class KioskTest {
 	 * Test constructores.
 	 */
 	@Test
-	public void KioskConOpcionOperativa() {
+	public void KioskConOpcionOperativo() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
 				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
 				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
@@ -767,6 +769,176 @@ public class KioskTest {
 
 		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
 		kiosk.modificarNumTaquillas(-1);
+	}
+	
+	@Test
+	public void testGetOperativo() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+		Kiosk kiosk1 = new Kiosk("1",gps, horario,1,false);
+		assertTrue(kiosk.getOperativo());
+		assertFalse(kiosk1.getOperativo());
+	}
+	
+	
+	@Test
+	public void testgetNumeroTaquillas() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+		
+		assertEquals(1,kiosk.getNumeroTaquillas());
+		
+	}
+	
+	@Test
+	public void testgetNumeroTaquillasLlenas() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+		Kiosk kiosk1 = new Kiosk("1",gps, horario,1);
+		Package paquete0 = new Package("0000000000", 0, true);
+		kiosk1.asignaPaquete(paquete0);
+
+		assertEquals(0,kiosk.getNumeroTaquillasLlenas());
+		assertEquals(1,kiosk1.getNumeroTaquillasLlenas());
+	}
+	
+	@Test
+	public void testgetNumeroTaquillasVacias() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+		Kiosk kiosk1 = new Kiosk("1",gps, horario,1);
+		Package paquete0 = new Package("0000000000", 0, true);
+		kiosk1.asignaPaquete(paquete0);
+
+		assertEquals(1,kiosk.getNumeroTaquillasVacias());
+		assertEquals(0,kiosk1.getNumeroTaquillasVacias());		
+	}
+	@Test
+	public void testgetPaquetes() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		Kiosk kiosk = new Kiosk("0", gps, horario, 2);
+
+		Package paquete0 = new Package("0000000000", 0, true);
+		Package paquete1 = new Package("0000000011", 0, false);
+		kiosk.asignaPaquete(paquete0);
+		kiosk.asignaPaquete(paquete1);
+		assertTrue(kiosk.getPaquetes().contains(paquete0));
+		assertTrue(kiosk.getPaquetes().contains(paquete1));
+		
+	}
+	
+	@Test
+	public void testBorrable() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+		Kiosk kiosk1 = new Kiosk("1",gps, horario,1);
+		Package paquete0 = new Package("0000000000", 0, true);
+		kiosk1.asignaPaquete(paquete0);
+		
+		assertTrue(kiosk.borrable());
+		assertFalse(kiosk1.borrable());
+	}
+	
+	@Test
+	public void testGetHorario() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+				
+		assertArrayEquals(horario,kiosk.getHorario());
+		
+	}
+	@Test
+	public void testGetUbicacion() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+				
+		assertEquals(gps,kiosk.getUbicacion());
+	}
+	
+	@Test
+	public void testOperatividad() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+		Kiosk kiosk1 = new Kiosk("1",gps, horario,1,false);
+		
+		kiosk.operatividad();
+		kiosk1.operatividad();
+		
+		assertFalse(kiosk.getOperativo());
+		assertTrue(kiosk1.getOperativo());	
+		
 	}
 
 }

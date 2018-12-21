@@ -31,25 +31,23 @@ public class Kiosk extends GroupablePickingPoint {
 	 * 
 	 * @param id              id de la taquilla.
 	 * @param ubicacion       ubicación de la taquilla.
-	 * @param horario         forma en la que se representa el día de la semana
-	 *                        y la hora de apertura y cierre de cada día.
-	 *                        Esquema:
+	 * @param horario         forma en la que se representa el día de la semana y la
+	 *                        hora de apertura y cierre de cada día. Esquema:
 	 *                        [[LocalTime(apertura),Localtime(cierre)],...,[LocalTime,Localtime]]
 	 * @param numeroTaquillas número de taquillas del PickingPoint.
 	 * @throws IllegalArgumentException si alguno de los argumentos es null.
-	 * @throws IllegalArgumentException si el horario no contiene los 7 dias de
-	 *                                  la semana, que uno de los dias sea null,
-	 *                                  que un dia no tenga exactamente 2 horas
-	 *                                  o que la hora de apertura sea mayor que
-	 *                                  la hora de cierre.
+	 * @throws IllegalArgumentException si el horario no contiene los 7 dias de la
+	 *                                  semana, que uno de los dias sea null, que un
+	 *                                  dia no tenga exactamente 2 horas o que la
+	 *                                  hora de apertura sea mayor que la hora de
+	 *                                  cierre.
 	 * @throws IllegalArgumentException si el numeroTaquillas es menor que 0.
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#PickingPoint(String,
 	 *      GPSCoordinate, LocalTime[][],int, boolean)
 	 */
-	public Kiosk(String id, GPSCoordinate ubicacion, LocalTime[][] horario,
-			int numeroTaquillas) {
+	public Kiosk(String id, GPSCoordinate ubicacion, LocalTime[][] horario, int numeroTaquillas) {
 		super(id, ubicacion, horario, numeroTaquillas);
-	} 
+	}
 
 	/**
 	 * Inicializa el Kiosk con la id, ubicación, horario semanal, número de
@@ -57,25 +55,23 @@ public class Kiosk extends GroupablePickingPoint {
 	 * 
 	 * @param id              id de la taquilla.
 	 * @param ubicacion       ubicación de la taquilla.
-	 * @param horario         forma en la que se representa el día de la semana
-	 *                        y la hora de apertura y cierre de cada día.
-	 *                        Esquema:
+	 * @param horario         forma en la que se representa el día de la semana y la
+	 *                        hora de apertura y cierre de cada día. Esquema:
 	 *                        [[LocalTime(apertura),Localtime(cierre)],...,[LocalTime,Localtime]]
 	 * @param numeroTaquillas número de taquillas del PickingPoint.
 	 * @param operativo       indica si el PackageLocker está operativo desde el
 	 *                        momento creado o no.
 	 * @throws IllegalArgumentException si alguno de los argumentos es null.
-	 * @throws IllegalArgumentException si el horario no contiene los 7 dias de
-	 *                                  la semana, que uno de los dias sea null,
-	 *                                  que un dia no tenga exactamente 2 horas
-	 *                                  o que la hora de apertura sea mayor que
-	 *                                  la hora de cierre.
+	 * @throws IllegalArgumentException si el horario no contiene los 7 dias de la
+	 *                                  semana, que uno de los dias sea null, que un
+	 *                                  dia no tenga exactamente 2 horas o que la
+	 *                                  hora de apertura sea mayor que la hora de
+	 *                                  cierre.
 	 * @throws IllegalArgumentException si el numeroTaquillas es menor que 0.
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#PickingPoint(String,
 	 *      GPSCoordinate, LocalTime[][],int, boolean)
 	 */
-	public Kiosk(String id, GPSCoordinate ubicacion, LocalTime[][] horario,
-			int numeroTaquillas, boolean operativo) {
+	public Kiosk(String id, GPSCoordinate ubicacion, LocalTime[][] horario, int numeroTaquillas, boolean operativo) {
 		super(id, ubicacion, horario, numeroTaquillas, operativo);
 	}
 
@@ -105,8 +101,8 @@ public class Kiosk extends GroupablePickingPoint {
 	 * 
 	 * @param modificacion modificacion a realizar.
 	 * 
-	 * @throws IllegalArgumentException si se intentan borrar mas taquillas de
-	 *                                  las existentes, o mas taquillas de las
+	 * @throws IllegalArgumentException si se intentan borrar mas taquillas de las
+	 *                                  existentes, o mas taquillas de las
 	 *                                  disponibles en el momento.
 	 */
 	public void modificarNumTaquillas(int modificacion) {
@@ -117,15 +113,15 @@ public class Kiosk extends GroupablePickingPoint {
 		setNumeroTaquillas(modificacion + getNumeroTaquillas());
 	}
 
-	/*
+	/**
+	 * Modifica el estado del paquete a sacado de la taquilla dada en caso de que
+	 * esté pagado, si no lo está, lo paga y luego se cambia el estado a sacado de
+	 * la taquilla dada.
+	 * 
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#sacaPaquete(int, LocalDate)
 	 */
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada, int dia,
-			LocalTime hora) {
+	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada, int dia, LocalTime hora) {
 		super.sacaPaquete(idTaquilla, fechaSacada, dia, hora);
 
 		Package paquete = getPaquetesInterno().get(idTaquilla);

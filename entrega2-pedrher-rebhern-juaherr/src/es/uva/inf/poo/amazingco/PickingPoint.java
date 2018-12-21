@@ -7,6 +7,15 @@ import java.util.Collections;
 
 import es.uva.inf.poo.maps.GPSCoordinate;
 
+
+/**
+ * Es un PickingPoint.
+ * 
+ * @author juaherr
+ * @author rebhern
+ * @author pedro
+ *
+ */
 public abstract class PickingPoint {
 
 	private String id;
@@ -30,7 +39,7 @@ public abstract class PickingPoint {
 	 *                        Esquema:
 	 *                        [[LocalTime(apertura),Localtime(cierre)],...,[LocalTime,Localtime]]
 	 * @param numeroTaquillas número de taquillas del PickingPoint.
-	 * @param operativo       indica si el PackageLocker está operativo desde el
+	 * @param operativo       indica si el PickingPoint está operativo desde el
 	 *                        momento creado o no.
 	 * @throws IllegalArgumentException si alguno de los argumentos es null.
 	 * @throws IllegalArgumentException si el horario no contiene los 7 dias de
@@ -44,7 +53,7 @@ public abstract class PickingPoint {
 			LocalTime[][] horario, int numeroTaquillas, boolean operativo) {
 
 		// Comprueba que los argumentos dados para la inicialización del
-		// PackageLocker
+		// PickingPoint
 		// sean válidos.
 		if (id == null || ubicacion == null || horario == null) {
 			throw new IllegalArgumentException(
@@ -112,10 +121,10 @@ public abstract class PickingPoint {
 	}
 
 	/**
-	 * Devuelve true si el PackageLocker está operativo y false en caso
+	 * Devuelve true si el PickingPoint está operativo y false en caso
 	 * contrario.
 	 * 
-	 * @return true si el PackageLocker está operativo y false si no lo está.
+	 * @return true si el PickingPoint está operativo y false si no lo está.
 	 */
 	public boolean getOperativo() {
 		return operativo;
@@ -144,9 +153,9 @@ public abstract class PickingPoint {
 	}
 
 	/**
-	 * Devuelve una copia de las taquillas del PackageLocker.
+	 * Devuelve una copia de las taquillas del PickingPoint.
 	 * 
-	 * @return copia de taquillas del PackageLocker.
+	 * @return copia de taquillas del PickingPoint.
 	 */
 	public ArrayList<Package> getPaquetes() {
 		ArrayList<Package> listaPaquetes = new ArrayList<>(
@@ -167,9 +176,9 @@ public abstract class PickingPoint {
 	public abstract boolean borrable();
 
 	/**
-	 * Devuelve la id del PackageLocker.
+	 * Devuelve la id del PickingPoint.
 	 * 
-	 * @return id del PackageLocker.
+	 * @return id del PickingPoint.
 	 */
 	public String getId() {
 		return id;
@@ -187,7 +196,7 @@ public abstract class PickingPoint {
 	}
 
 	/**
-	 * Devuelve el número de taquillas llenas que tiene el PackageLocker.
+	 * Devuelve el número de taquillas llenas que tiene el PickingPoint.
 	 * 
 	 * @return número de taquillas llenas.
 	 */
@@ -196,7 +205,7 @@ public abstract class PickingPoint {
 	}
 
 	/**
-	 * Devuelve el número de taquillas vacías que tiene el PackageLocker.
+	 * Devuelve el número de taquillas vacías que tiene el PickingPoint.
 	 * 
 	 * @return número de taquillas vacías.
 	 */
@@ -205,7 +214,7 @@ public abstract class PickingPoint {
 	}
 
 	/**
-	 * Devuelve la copia de la ubicación geográfica del PackageLocker.
+	 * Devuelve la copia de la ubicación geográfica del PickingPoint.
 	 * 
 	 * @return copia de la ubicación geográfica.
 	 */
@@ -215,7 +224,7 @@ public abstract class PickingPoint {
 	}
 
 	/**
-	 * Cambia el packageLocker a operativo si está fuera de servicio y
+	 * Cambia el PickingPoint a operativo si está fuera de servicio y
 	 * viceversa.
 	 */
 	public void operatividad() {
@@ -244,7 +253,7 @@ public abstract class PickingPoint {
 	 * @return Número de la taquilla en la que está el paquete.
 	 * @throws IllegalArgumentException Si la id es null
 	 * @throws IllegalArgumentException Si no existe el paquete en el
-	 *                                  PackageLocker indicado.
+	 *                                  PickingPoint indicado.
 	 */
 	public int locaclizaPaquete(String idPaquete) {
 		if (idPaquete == null) {
@@ -274,7 +283,7 @@ public abstract class PickingPoint {
 	 * 
 	 * @param paquete paquete a guardar.
 	 * @throws IllegalArgumentException Si el paquete es null.
-	 * @throws IllegalStateException    Si el PackageLocker está lleno.
+	 * @throws IllegalStateException    Si el PickingPoint está lleno.
 	 * @throws IllegalStateException    Si hay otro paquete con la misma id.
 	 */
 	public void asignaPaquete(Package paquete) {
@@ -293,7 +302,7 @@ public abstract class PickingPoint {
 					"Paquete no valido para el picking point.");
 		}
 
-		// comprueba que no haya un paquete con la misma id en el PackageLocker.
+		// comprueba que no haya un paquete con la misma id en el PickingPoint.
 
 		if (buscaPaquete(paquete.getId()) != -1) {
 			throw new IllegalStateException("Hay otro paquete con la misma id");
