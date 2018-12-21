@@ -13,7 +13,12 @@ import es.uva.inf.poo.maps.GPSCoordinate;
  * Permite añadir y borrar GroupablePickingPoints, tambien comprobar si uno de
  * estos está en el hub y saber cuales y cuantos estan guardados.
  * 
- * Tambiem permite almacenar paquetes ya pagados o a contrarrembolso ( si hay algún kiosk libre).
+ * Tambiem permite almacenar paquete de la forma que lo hacen el PackageLocker y
+ * el Kiosk siempre que esten en el hub.
+ * 
+ * @see es.uva.inf.poo.amazingco.PackageLocker
+ * @see es.uva.inf.poo.amazingco.Kiosk
+ * 
  * 
  * @author juaherr
  * @author rebhern

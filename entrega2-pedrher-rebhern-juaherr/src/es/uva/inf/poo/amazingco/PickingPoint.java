@@ -69,15 +69,19 @@ public abstract class PickingPoint {
 			if (horario[i] == null || horario[i].length != 2) {
 				throw new IllegalArgumentException("Días mal introducidos.");
 			}
-			for (int j = 0; j < 2; j++) {
-				if (horario[i][j] == null
-						|| horario[i][0].isAfter(horario[i][1])) {
+			
+				if (horario[i][0] == null||horario[i][1] == null) {
+					throw new IllegalArgumentException(
+							"Horas mal introducidas.");
+				}
+				if(horario[i][0].isAfter(horario[i][1])) {
+
 					throw new IllegalArgumentException(
 							"Horas mal introducidas.");
 				}
 			}
 
-		}
+		
 		if (numeroTaquillas < 1) {
 			throw new IllegalArgumentException(
 					"Número de taquillas no positivo.");
