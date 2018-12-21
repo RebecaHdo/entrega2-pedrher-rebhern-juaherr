@@ -6,6 +6,18 @@ import java.util.ArrayList;
 
 import es.uva.inf.poo.maps.GPSCoordinate;
 
+/**
+ * Punto de recogida que almacena una cantidad ilimitada de paquetes, permite
+ * realizar entregas de paquetes certificados, calcula el dinero que hay que dar
+ * a AmazingCo por los paquetes a reembolso, y asignar, borrar, devolver y sacar
+ * paquetes actualizando el estado del paquete si es necesario.
+ * 
+ * @author juaherr
+ * @author rebhern
+ * @author pedrher
+ *
+ */
+
 public class PostOffice extends PickingPoint implements IdentificationRegistry {
 
 	private double dinero = 0;
