@@ -220,7 +220,149 @@ public class PickingPointHubTest {
 		assertTrue(pph.getPaquetes().contains(paquete2));
 
 	}
+	@Test
+	public void testGetOperativo() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
 
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 1);
+
+		GroupablePickingPoint[] puntos = { kiosk, locker };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horario, puntos, false);
+
+
+		assertFalse(pph.getOperativo());
+
+	}
+	@Test
+	public void testGetId() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 1);
+
+		GroupablePickingPoint[] puntos = { kiosk, locker };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horario, puntos, false);
+
+
+		assertEquals("0",pph.getId());
+
+	}
+	
+	@Test
+	public void testGetNumeroTaquillas() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 1);
+
+		GroupablePickingPoint[] puntos = { kiosk, locker };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horario, puntos);
+
+
+		assertEquals(2,pph.getNumeroTaquillas());
+
+	}
+	@Test
+	public void testGetNumeroTaquillasLLenas() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 1);
+
+		GroupablePickingPoint[] puntos = { kiosk, locker };
+
+		Package paquete = new Package("0000000000", 0, true);
+		PickingPointHub pph = new PickingPointHub("0", gps, horario, puntos);
+
+		
+		assertEquals(0,pph.getNumeroTaquillasLlenas());
+
+		pph.asignaPaquete(paquete);
+
+		assertEquals(1,pph.getNumeroTaquillasLlenas());
+
+	}
+	@Test
+	public void testGetNumeroTaquillasVacias() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 1);
+
+		GroupablePickingPoint[] puntos = { kiosk, locker };
+
+		Package paquete = new Package("0000000000", 0, true);
+		PickingPointHub pph = new PickingPointHub("0", gps, horario, puntos);
+
+		
+		assertEquals(2,pph.getNumeroTaquillasVacias());
+
+		pph.asignaPaquete(paquete);
+
+		assertEquals(1,pph.getNumeroTaquillasVacias());
+
+	}
+	@Test
+	public void testGetUbicacion() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 1);
+
+		GroupablePickingPoint[] puntos = { kiosk, locker };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horario, puntos, false);
+
+
+		assertEquals(gps,pph.getUbicacion());
+
+	}
 	@Test
 	public void testPaqueteValido() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
@@ -361,34 +503,6 @@ public class PickingPointHubTest {
 
 	}
 
-	@Test
-	public void testPickingPointHubSinOperatividadBuenOrden() {
-		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
-				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
-				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
-				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
-				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
-				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
-				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
-		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
-
-		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
-		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
-		PackageLocker locker2 = new PackageLocker("locker2", gps, horario, 1);
-
-		GroupablePickingPoint[] puntos = { locker, kiosk, locker2 };
-
-		PickingPointHub pph = new PickingPointHub("0", gps, horario, puntos);
-
-		assertEquals(4, pph.getNumeroTaquillas());
-		assertEquals(0, pph.getNumeroTaquillasLlenas());
-		assertTrue(pph.getOperativo());
-		assertEquals(3, pph.getNumPuntos());
-		assertTrue(pph.estaPuntoRecogida("locker"));
-		assertTrue(pph.estaPuntoRecogida("kiosk"));
-		assertTrue(pph.estaPuntoRecogida("locker2"));
-
-	}
 	@SuppressWarnings("unused")
 	@Test(expected = IllegalArgumentException.class)
 	public void testPickingPointHubSinOperatividadMenosDeDosPuntos() {
@@ -436,8 +550,12 @@ public class PickingPointHubTest {
 
 	}
 
-	@Test
-	public void testPickingPointHubConOperatividadBuenOrden() {
+	/*
+	 * Pruebas no válidas del constructor con opción de operatividad.
+	 */
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testPickingPointHubConOperativadIdNull() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
 				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
 				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
@@ -449,22 +567,454 @@ public class PickingPointHubTest {
 
 		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
 		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
-		PackageLocker locker2 = new PackageLocker("locker2", gps, horario, 1);
 
-		GroupablePickingPoint[] puntos = { locker, kiosk, locker2 };
+		GroupablePickingPoint[] puntos = { locker, kiosk };
 
-		PickingPointHub pph = new PickingPointHub("0", gps, horario, puntos,
+		PickingPointHub pph = new PickingPointHub(null, gps, horario, puntos,
 				false);
-
-		assertEquals(4, pph.getNumeroTaquillas());
-		assertEquals(0, pph.getNumeroTaquillasLlenas());
-		assertFalse(pph.getOperativo());
-		assertEquals(3, pph.getNumPuntos());
-		assertTrue(pph.estaPuntoRecogida("locker"));
-		assertTrue(pph.estaPuntoRecogida("kiosk"));
-		assertTrue(pph.estaPuntoRecogida("locker2"));
-
 	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testPickingPointHubConOperativadGpsNull() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		PickingPointHub pph = new PickingPointHub("0", null, horario, puntos,
+				false);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testPickingPointHubConOperativadHorarioNull() {
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0000000000", gps, null, 1, true);
+	}
+
+	/*
+	 * Pruebas no válida del constructor con opción de operatividad donde se
+	 * analiza el horario como un conjunto, por tanto se prueban los errores en
+	 * los extremos.
+	 */
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testPickingPointHubConOperativadOchoDias() {
+		LocalTime[][] horarioMal = {
+				{ LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) } };
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horarioMal, puntos,
+				false);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testPickingPointHubConOperativadSeisDias() {
+		LocalTime[][] horarioMal = {
+				{ LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) } };
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horarioMal, puntos,
+				false);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testPickingPointHubConOperativadPrimerDiaNull() {
+		LocalTime[][] horarioMal = { null,
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horarioMal, puntos,
+				false);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testPickingPointHubConOperativadUltimoDiaNull() {
+		LocalTime[][] horarioMal = {
+				{ LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) }, null };
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horarioMal, puntos,
+				false);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testPickingPointHubConOperativadHoraAperturaPrimerDiaNull() {
+		LocalTime[][] horarioMal = { { null, LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horarioMal, puntos,
+				false);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testPickingPointHubConOperativadHoraCierrePrimerDiaNull() {
+		LocalTime[][] horarioMal = { { LocalTime.of(8, 0), null },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horarioMal, puntos,
+				false);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testPickingPointHubConOperativadHoraAperturaUltimoDiaNull() {
+		LocalTime[][] horarioMal = {
+				{ LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ null, LocalTime.of(23, 00) } };
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horarioMal, puntos,
+				false);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testPickingPointHubConOperativadHoraCierreUltimoDiaNull() {
+		LocalTime[][] horarioMal = {
+				{ LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), null } };
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horarioMal, puntos,
+				false);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testPickingPointHubConOperativadPrimerDiaTresHoras() {
+		LocalTime[][] horarioMal = {
+				{ LocalTime.of(3, 30), LocalTime.of(8, 0),
+						LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horarioMal, puntos,
+				false);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testPickingPointHubConOperativadPrimerDiaUnaHora() {
+		LocalTime[][] horarioMal = { { LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horarioMal, puntos,
+				false);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testPickingPointHubConOperativadUltimoDiaTresHoras() {
+		LocalTime[][] horarioMal = {
+				{ LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(1, 0), LocalTime.of(2, 15),
+						LocalTime.of(23, 00) } };
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horarioMal, puntos,
+				false);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testPickingPointHubConOperativadUltimoDiaUnaHora() {
+		LocalTime[][] horarioMal = {
+				{ LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15) } };
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horarioMal, puntos,
+				false);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testPickingPointHubConOperativadPrimerDiaHorasMalIntroducidas() {
+		LocalTime[][] horarioMal = {
+				{ LocalTime.of(23, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horarioMal, puntos,
+				false);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testPickingPointHubConOperativadUltimoDiaHorasMalIntroducidas() {
+		LocalTime[][] horarioMal = {
+				{ LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(23, 15), LocalTime.of(23, 00) } };
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horarioMal, puntos,
+				false);
+	}
+
+	/*
+	 * Pruebas no válidas del constructor con opción de operativiad respecto al
+	 * número de GroupablePickingPoints.
+	 */
+
 	@SuppressWarnings("unused")
 	@Test(expected = IllegalArgumentException.class)
 	public void testPickingPointHubConOperatividadMenosDeDosPuntos() {
@@ -810,4 +1360,91 @@ public class PickingPointHubTest {
 
 	}
 
+	@Test
+	public void testGetHorario() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horario, puntos,
+				false);
+
+		assertArrayEquals(horario, pph.getHorario());
+	}
+
+	@Test
+	public void testLocalizaPaquete() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		Package paquete = new Package("0000000000", 0, true);
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horario, puntos);
+
+		pph.asignaPaquete(paquete);
+		assertEquals(0, pph.locaclizaPaquete("0000000000"));
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testLocalizaPaqueteIdNull() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horario, puntos);
+
+		pph.locaclizaPaquete(null);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testLocalizaPaqueteHubVacio() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+
+		PackageLocker locker = new PackageLocker("locker", gps, horario, 1);
+		Kiosk kiosk = new Kiosk("kiosk", gps, horario, 2);
+
+		GroupablePickingPoint[] puntos = { locker, kiosk };
+
+		PickingPointHub pph = new PickingPointHub("0", gps, horario, puntos);
+
+		pph.locaclizaPaquete("0000000000");
+	}
 }
