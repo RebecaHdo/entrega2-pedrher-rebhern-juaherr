@@ -86,21 +86,597 @@ public class KioskTest {
 		assertEquals(1, paquete1.getEstado());
 	}
 
+	/*
+	 * Test constructores.
+	 */
 	@Test
-	public void testKioskStringGPSCoordinateLocalTimeArrayArrayInt() {
-		// TODO preguntar a felix si copiamos y pegamos código de la bateria del
-		// pickingPoint o no lo hacemos directamente.
+	public void KioskConOpcionOperativa() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1, true);
 
-	}
-
-	@Test
-	public void testKioskStringGPSCoordinateLocalTimeArrayArrayIntBoolean() {
-		// TODO como el de arriba
+		assertEquals("0", kiosk.getId());
+		assertEquals(gps, kiosk.getUbicacion());
+		assertArrayEquals(horario, kiosk.getHorario());
+		assertEquals(1, kiosk.getNumeroTaquillas());
+		assertTrue(kiosk.getOperativo());
 	}
 
 	/*
-	 * Test getDinero()
+	 * Pruebas no válidas del constructor con opción de operatividad.
 	 */
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativaIdNull() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk(null, gps, horario, 1, true);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativoGpsNull() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		Kiosk kiosk = new Kiosk("0", null, horario, 1, true);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativoHorarioNull() {
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0000000000", gps, null, 1, true);
+	}
+
+	/*
+	 * Pruebas no válida del constructor con opción de operatividad donde se
+	 * analiza el horario como un conjunto, por tanto se prueban los errores en
+	 * los extremos.
+	 */
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativoOchoDias() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1, true);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativoSeisDias() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1, true);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativoPrimerDiaNull() {
+		LocalTime[][] horario = { null,
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1, true);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativoUltimoDiaNull() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) }, null };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1, true);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativoHoraAperturaPrimerDiaNull() {
+		LocalTime[][] horario = { { null, LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1, true);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativoHoraCierrePrimerDiaNull() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), null },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1, true);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativoHoraAperturaUltimoDiaNull() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ null, LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1, true);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativoHoraCierreUltimoDiaNull() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), null } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1, true);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativoPrimerDiaTresHoras() {
+		LocalTime[][] horario = {
+				{ LocalTime.of(3, 30), LocalTime.of(8, 0),
+						LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1, true);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativoPrimerDiaUnaHora() {
+		LocalTime[][] horario = { { LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1, true);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativoUltimoDiaTresHoras() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(1, 0), LocalTime.of(2, 15),
+						LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1, true);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativoUltimoDiaUnaHora() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1, true);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativoPrimerDiaHorasMalIntroducidas() {
+		LocalTime[][] horario = { { LocalTime.of(23, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1, true);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativoUltimoDiaHorasMalIntroducidas() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(23, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1, true);
+	}
+
+	/*
+	 * Pruebas no válidas del constructor con opción de operativiad respecto al
+	 * número de Taquillas.
+	 */
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativoTaquillasNegativas() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, -1, true);
+
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskConOpcionOperativoTaquillasCero() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 0, true);
+
+	}
+
+	/*
+	 * Test constructor Kiosk con operatividad = true.
+	 */
+	@Test
+	public void testKioskOperativoDirectamente() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1, true);
+
+		assertEquals("0", kiosk.getId());
+		assertEquals(gps, kiosk.getUbicacion());
+		assertArrayEquals(horario, kiosk.getHorario());
+		assertEquals(1, kiosk.getNumeroTaquillas());
+		assertTrue(kiosk.getOperativo());
+
+	}
+
+	/*
+	 * Pruebas no válidas del constructor con opcion operativo.
+	 */
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamenteIdNull() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk(null, gps, horario, 1);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamenteGpsNull() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		Kiosk kiosk = new Kiosk("0", null, horario, 1);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamenteHorarioNull() {
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, null, 1);
+	}
+
+	/*
+	 * Pruebas no válida del constructor del Kiosk operativo donde se analiza el
+	 * horario como un conjunto, por tanto se prueba los extremos de los erroes.
+	 */
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamenteOchoDias() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamenteSeisDias() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamentePrimerDiaNull() {
+		LocalTime[][] horario = { null,
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamenteUltimoDiaNull() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) }, null };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamenteHoraAperturaPrimerDiaNull() {
+		LocalTime[][] horario = { { null, LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamenteHoraCierrePrimerDiaNull() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), null },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamenteHoraAperturaUltimoDiaNull() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ null, LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamenteHoraCierreUltimoDiaNull() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), null } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamentePrimerDiaTresHoras() {
+		LocalTime[][] horario = {
+				{ LocalTime.of(3, 30), LocalTime.of(8, 0),
+						LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamentePrimerDiaUnaHora() {
+		LocalTime[][] horario = { { LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamenteUltimoDiaTresHoras() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(1, 0), LocalTime.of(2, 15),
+						LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamenteUltimoDiaUnaHora() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamentePrimerDiaHorasMalIntroducidas() {
+		LocalTime[][] horario = { { LocalTime.of(23, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamenteUltimoDiaHorasMalIntroducidas() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(23, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 1);
+	}
+
+	/*
+	 * Pruebas no váidas del constructor de Kiosk operativo respecto al número
+	 * de Taquillas.
+	 */
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamenteTaquillasNegativas() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, -1, true);
+
+	}
+
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
+	public void testKioskOperativoDirectamenteTaquillasCero() {
+		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
+				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
+				{ LocalTime.of(6, 30), LocalTime.of(21, 0) },
+				{ LocalTime.of(5, 45), LocalTime.of(15, 50) },
+				{ LocalTime.of(2, 15), LocalTime.of(23, 00) } };
+		GPSCoordinate gps = new GPSCoordinate(41.6551455, -4.7381979);
+		Kiosk kiosk = new Kiosk("0", gps, horario, 0, true);
+
+	}
 
 	@Test
 	public void testGetDinero() {
