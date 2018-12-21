@@ -7,7 +7,6 @@ import java.util.Collections;
 
 import es.uva.inf.poo.maps.GPSCoordinate;
 
-
 /**
  * Es un PickingPoint.
  * 
@@ -69,19 +68,16 @@ public abstract class PickingPoint {
 			if (horario[i] == null || horario[i].length != 2) {
 				throw new IllegalArgumentException("Días mal introducidos.");
 			}
-			
-				if (horario[i][0] == null||horario[i][1] == null) {
-					throw new IllegalArgumentException(
-							"Horas mal introducidas.");
-				}
-				if(horario[i][0].isAfter(horario[i][1])) {
 
-					throw new IllegalArgumentException(
-							"Horas mal introducidas.");
-				}
+			if (horario[i][0] == null || horario[i][1] == null) {
+				throw new IllegalArgumentException("Horas mal introducidas.");
 			}
+			if (horario[i][0].isAfter(horario[i][1])) {
 
-		
+				throw new IllegalArgumentException("Horas mal introducidas.");
+			}
+		}
+
 		if (numeroTaquillas < 1) {
 			throw new IllegalArgumentException(
 					"Número de taquillas no positivo.");
@@ -224,8 +220,7 @@ public abstract class PickingPoint {
 	}
 
 	/**
-	 * Cambia el PickingPoint a operativo si está fuera de servicio y
-	 * viceversa.
+	 * Cambia el PickingPoint a operativo si está fuera de servicio y viceversa.
 	 */
 	public void operatividad() {
 		setOperativo(!getOperativo());
@@ -277,7 +272,7 @@ public abstract class PickingPoint {
 	 * @return true si se puede guardar y false si no.
 	 */
 	public abstract boolean paqueteValido(Package paquete);
-	//TODO hacer si no se llena el coverage sino sudar
+	// TODO hacer si no se llena el coverage sino sudar
 
 	/**
 	 * Asigna el paquete dado a una taquilla.
@@ -344,7 +339,8 @@ public abstract class PickingPoint {
 			throw new IllegalArgumentException(NUMERO_TAQUILLA_ERRONEO);
 		}
 
-		if (getPaquetesInterno().get(idTaquilla) == null) {
+		if (idTaquilla >= getPaquetesInterno().size()
+				|| getPaquetesInterno().get(idTaquilla) == null) {
 			throw new IllegalStateException(TAQUILLA_VACIA);
 		}
 
@@ -364,7 +360,8 @@ public abstract class PickingPoint {
 			throw new IllegalArgumentException(NUMERO_TAQUILLA_ERRONEO);
 		}
 
-		if (getPaquetesInterno().get(idTaquilla) == null) {
+		if (idTaquilla >= getPaquetesInterno().size()
+				|| getPaquetesInterno().get(idTaquilla) == null) {
 			throw new IllegalStateException(TAQUILLA_VACIA);
 		}
 		getPaquetesInterno().set(idTaquilla, null);
@@ -391,9 +388,18 @@ public abstract class PickingPoint {
 					"El PickingPoint no está operativo.");
 
 		}
+		if (hora == null) {
+			throw new IllegalArgumentException("La hora es nula.");
+
+		}
+		if (dia <  0 || dia > 6) {
+			throw new IllegalArgumentException("El dia de la semana esta comprendido entre 0 y 6.");
+
+		}
+		
 		if (getHorario()[dia][0].isAfter(hora)
-				&& getHorario()[dia][1].isBefore(hora)) {
-			throw new IllegalArgumentException(
+				|| getHorario()[dia][1].isBefore(hora)) {
+			throw new IllegalStateException(
 					"El PickingPoint está cerrado a esta hora del dia.");
 		}
 		if (idTaquilla < 0 || idTaquilla > getNumeroTaquillas() - 1) {
@@ -403,7 +409,8 @@ public abstract class PickingPoint {
 			throw new IllegalArgumentException("La fecha es nula.");
 
 		}
-		if (getPaquetesInterno().get(idTaquilla) == null) {
+		if (idTaquilla >= getPaquetesInterno().size()
+				|| getPaquetesInterno().get(idTaquilla) == null) {
 			throw new IllegalStateException(TAQUILLA_VACIA);
 
 		}
@@ -421,7 +428,8 @@ public abstract class PickingPoint {
 		if (idTaquilla < 0 || idTaquilla > getNumeroTaquillas() - 1) {
 			throw new IllegalArgumentException(NUMERO_TAQUILLA_ERRONEO);
 		}
-		if (getPaquetesInterno().get(idTaquilla) == null) {
+		if (idTaquilla >= getPaquetesInterno().size()
+				|| getPaquetesInterno().get(idTaquilla) == null) {
 			throw new IllegalStateException(TAQUILLA_VACIA);
 		}
 		getPaquetesInterno().get(idTaquilla).devuelto();

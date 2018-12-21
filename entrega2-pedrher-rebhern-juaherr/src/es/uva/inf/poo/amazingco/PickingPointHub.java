@@ -358,32 +358,30 @@ public class PickingPointHub extends PickingPoint {
 	 */
 	@Override
 	public void asignaPaquete(Package paquete) {
-		if (!paquete.getPagado()) {
-			boolean kioskValido = false;
-			for (int i = getNumPackageLockers(); i < getListaPuntosInterna()
-					.size(); i++) {
-
-				if (getListaPuntosInterna().get(i)
-						.getNumeroTaquillasVacias() > 0) {
-					kioskValido = true;
-
-				}
-			}
-			if (!kioskValido) {
-				throw new IllegalStateException(
-						"No hay ningún kiosko valido donde guardar el paquete.");
-
-			}
+		if (paquete == null) {
+			throw new IllegalArgumentException("El paquete es null.");
 		}
-		super.asignaPaquete(paquete);
+
 		int i = 0;
+		boolean guardado = false;
 		while (i < getListaPuntosInterna().size()) {
 			if (getListaPuntosInterna().get(i).getNumeroTaquillasVacias() > 0
-					&& getListaPuntosInterna().get(i).paqueteValido(paquete)) {
+					&& getListaPuntosInterna().get(i).paqueteValido(paquete)
+					&& getListaPuntosInterna().get(i).getOperativo()) {
+
+				super.asignaPaquete(paquete);
 				getListaPuntosInterna().get(i).asignaPaquete(paquete);
+
+				guardado = true;
+
 				i = getListaPuntosInterna().size();
 			}
 			i++;
+		}
+		if (!guardado) {
+			throw new IllegalStateException(
+					"No se ha podido guardar el paquete.");
+
 		}
 	}
 
@@ -401,7 +399,10 @@ public class PickingPointHub extends PickingPoint {
 			throw new IllegalArgumentException(
 					"Número de taquilla erroneo. Debe estar comprendido entre 0 y numero de taquillas -1");
 		}
-
+		if (idTaquilla >= getPaquetesInterno().size()
+				|| getPaquetesInterno().get(idTaquilla) == null) {
+			throw new IllegalStateException("Esta taquilla está vacia.");
+		}
 		Package paquete = getPaquetesInterno().get(idTaquilla);
 		super.borraPaquete(idTaquilla);
 
@@ -409,6 +410,7 @@ public class PickingPointHub extends PickingPoint {
 		while (i < getListaPuntosInterna().size()) {
 			if (getListaPuntosInterna().get(i)
 					.buscaPaquete(paquete.getId()) > -1) {
+
 				int pos = getListaPuntosInterna().get(i)
 						.localizaPaquete(paquete.getId());
 				getListaPuntosInterna().get(i).borraPaquete(pos);
