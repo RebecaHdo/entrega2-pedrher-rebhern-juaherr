@@ -13,22 +13,47 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 	private static final String NO_EN_EL_REGISTRO = "El paquete no está en el registro.";
 
 	/**
+	 * 
+	 * @param id        id de la taquilla.
+	 * @param ubicacion ubicación de la taquilla.
+	 * @param horario   forma en la que se representa el día de la semana y la hora
+	 *                  de apertura y cierre de cada día. Esquema:
+	 *                  [[LocalTime(apertura),Localtime(cierre)],...,[LocalTime,Localtime]]
+	 * 
+	 * @throws IllegalArgumentException si alguno de los argumentos es null.
+	 * @throws IllegalArgumentException si el horario no contiene los 7 dias de la
+	 *                                  semana, que uno de los dias sea null, que un
+	 *                                  dia no tenga exactamente 2 horas o que la
+	 *                                  hora de apertura sea mayor que la hora de
+	 *                                  cierre.
+	 * 
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#PickingPoint(String,
 	 *      GPSCoordinate, LocalTime[][],int)
 	 */
-	public PostOffice(String id, GPSCoordinate ubicacion,
-			LocalTime[][] horario) {
+	public PostOffice(String id, GPSCoordinate ubicacion, LocalTime[][] horario) {
 		super(id, ubicacion, horario, (int) Double.POSITIVE_INFINITY);
 	}
 
 	/**
+	 * @param id        id de la taquilla.
+	 * @param ubicacion ubicación de la taquilla.
+	 * @param horario   forma en la que se representa el día de la semana y la hora
+	 *                  de apertura y cierre de cada día. Esquema:
+	 *                  [[LocalTime(apertura),Localtime(cierre)],...,[LocalTime,Localtime]]
+	 * @param operativo indica si el PackageLocker está operativo desde el momento
+	 *                  creado o no.
+	 * @throws IllegalArgumentException si alguno de los argumentos es null.
+	 * @throws IllegalArgumentException si el horario no contiene los 7 dias de la
+	 *                                  semana, que uno de los dias sea null, que un
+	 *                                  dia no tenga exactamente 2 horas o que la
+	 *                                  hora de apertura sea mayor que la hora de
+	 *                                  cierre.
+	 * 
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#PickingPoint(String,
 	 *      GPSCoordinate, LocalTime[][],int ,boolean)
 	 */
-	public PostOffice(String id, GPSCoordinate ubicacion, LocalTime[][] horario,
-			boolean operativo) {
-		super(id, ubicacion, horario, (int) Double.POSITIVE_INFINITY,
-				operativo);
+	public PostOffice(String id, GPSCoordinate ubicacion, LocalTime[][] horario, boolean operativo) {
+		super(id, ubicacion, horario, (int) Double.POSITIVE_INFINITY, operativo);
 	}
 
 	private ArrayList<Object[]> getRegistro() {
@@ -49,11 +74,14 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 	}
 
 	/**
-	 * @see es.uva.inf.poo.amazingco.PickingPoint#sacaPaquete(int, LocalDate)
+	 * @throws IllegalStateException si la taquilla indicada está vacia o si el
+	 *                               paquete está certificado.
+	 * 
+	 * @see es.uva.inf.poo.amazingco.PickingPoint#sacaPaquete(int, LocalDate, int,
+	 *      LocalTime)
 	 */
 	@Override
-	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada, int dia,
-			LocalTime hora) {
+	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada, int dia, LocalTime hora) {
 
 		Package paquete = getPaquetesInterno().get(idTaquilla);
 
@@ -94,6 +122,8 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 	}
 
 	/**
+	 * @throws IllegalArgumentException si el paquete no está en el registro.
+	 * 
 	 * @see es.uva.inf.poo.amazingco.IdentificationRegistry#getPackageRegistered(String)
 	 */
 	@Override
@@ -106,6 +136,8 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 	}
 
 	/**
+	 * @throws IllegalArgumentException si el paquete no está en el registro.
+	 * 
 	 * @see es.uva.inf.poo.amazingco.IdentificationRegistry#getRegisteredIdFor(String)
 	 */
 	@Override
@@ -117,6 +149,8 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 	}
 
 	/**
+	 * @throws IllegalArgumentException si el paquete no está en el registro.
+	 * 
 	 * @see es.uva.inf.poo.amazingco.IdentificationRegistry#getPickupDateFor(String)
 	 */
 	@Override
@@ -128,19 +162,20 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 	}
 
 	/**
+	 * @throws IllegalArgumentException si el paquete indicado es null o si la fecha
+	 *                                  de vencimiento ya ha pasado.
+	 * 
 	 * @see es.uva.inf.poo.amazingco.IdentificationRegistry#registerCertifiedPackagePickup(Package,
 	 *      String, LocalDate)
 	 */
 	@Override
-	public void registerCertifiedPackagePickup(Package p, String dni,
-			LocalDate pickupDate) {
+	public void registerCertifiedPackagePickup(Package p, String dni, LocalDate pickupDate) {
 
 		if (pickupDate == null) {
 			throw new IllegalArgumentException("El pickupDate es null.");
 		}
 		if (pickupDate.isAfter(p.getFecha())) {
-			throw new IllegalArgumentException(
-					"La fecha de vencimiento ya ha pasado.");
+			throw new IllegalArgumentException("La fecha de vencimiento ya ha pasado.");
 		}
 		Object[] resgistroPaquete = { p, dni, pickupDate };
 		getRegistro().add(resgistroPaquete);
@@ -165,8 +200,11 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 	/**
 	 * Todos los paquetes son validos.
 	 * 
+	 * @throws IllegalArgumentException si el paquete indicado es null.
+	 * 
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#PickingPoint(String,
 	 *      GPSCoordinate, LocalTime[][],int, boolean)
+	 * 
 	 */
 	@Override
 	public boolean paqueteValido(Package paquete) {
