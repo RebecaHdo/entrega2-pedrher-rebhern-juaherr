@@ -49,7 +49,7 @@ public class Kiosk extends GroupablePickingPoint {
 	public Kiosk(String id, GPSCoordinate ubicacion, LocalTime[][] horario,
 			int numeroTaquillas) {
 		super(id, ubicacion, horario, numeroTaquillas);
-	}
+	} 
 
 	/**
 	 * Inicializa el Kiosk con la id, ubicación, horario semanal, número de
