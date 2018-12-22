@@ -77,14 +77,13 @@ public abstract class GroupablePickingPoint extends PickingPoint {
 	}
 
 	/**
-	 * Comprueba si un paquete puede ser guardado en el GroupablePickingPoint o
-	 * no.
+	 * Comprueba si un paquete puede ser guardado en el GroupablePickingPoint o no.
 	 * 
 	 * Un paquete es valido siempre que no sea certificado.
 	 * 
 	 * @param paquete paquete a comprobar.
 	 * @return true si el paquete no es certificado.
-	 * @throws IllegalArgumentException {@inheritDoc}
+	 * @throws IllegalArgumentException si el paquete es null.
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#paqueteValido(Package)
 	 */
 	@Override
