@@ -422,8 +422,15 @@ public class PickingPointHub extends PickingPoint {
 	}
 
 	/**
-	 * Comprueba si un paquete puede ser almacenado en el Hub.
+	 * Comprueba si un paquete puede ser guardado en el PickingPointHub o no.
 	 * 
+	 * Un paquete es valido siempre que sea válido es sus GroupablePickingPoints
+	 * guardados..
+	 * 
+	 * @param paquete paquete a comprobar.
+	 * @return true si el paquete es valido en los GroupablePickingPoints
+	 *         guardados..
+	 * @throws IllegalArgumentException si el paquete es null.
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#paqueteValido(Package)
 	 */
 	@Override

@@ -117,6 +117,8 @@ public abstract class PickingPoint {
 	}
 
 	/**
+	 * Comprueba la operatividad.
+	 * 
 	 * Devuelve true si el PickingPoint está operativo y false en caso
 	 * contrario.
 	 * 
@@ -140,6 +142,7 @@ public abstract class PickingPoint {
 	}
 
 	/**
+	 * 
 	 * Devuelve el número de taquillas totales.
 	 * 
 	 * @return número de taquillas totales.
@@ -149,7 +152,10 @@ public abstract class PickingPoint {
 	}
 
 	/**
-	 * Devuelve una copia de las taquillas del PickingPoint.
+	 *
+	 * Devuelve una copia de las taquillas.
+	 * 
+	 * Se asegura de solo devolver los paquetes y no devolver ningún null.
 	 * 
 	 * @return copia de taquillas del PickingPoint.
 	 */
@@ -192,7 +198,7 @@ public abstract class PickingPoint {
 	}
 
 	/**
-	 * Devuelve el número de taquillas llenas que tiene el PickingPoint.
+	 * Devuelve el número de taquillas llenas.
 	 * 
 	 * @return número de taquillas llenas.
 	 */
@@ -201,7 +207,7 @@ public abstract class PickingPoint {
 	}
 
 	/**
-	 * Devuelve el número de taquillas vacías que tiene el PickingPoint.
+	 * Devuelve el número de taquillas vacías.
 	 * 
 	 * @return número de taquillas vacías.
 	 */
@@ -210,7 +216,7 @@ public abstract class PickingPoint {
 	}
 
 	/**
-	 * Devuelve la copia de la ubicación geográfica del PickingPoint.
+	 * Devuelve la copia de la ubicación geográfica.
 	 * 
 	 * @return copia de la ubicación geográfica.
 	 */
@@ -220,7 +226,9 @@ public abstract class PickingPoint {
 	}
 
 	/**
-	 * Cambia el PickingPoint a operativo si está fuera de servicio y viceversa.
+	 * Cambia la operatividad.
+	 * 
+	 * Pasa el PickingPoint a operativo si está fuera de servicio y viceversa.
 	 */
 	public void operatividad() {
 		setOperativo(!getOperativo());
@@ -241,8 +249,8 @@ public abstract class PickingPoint {
 	}
 
 	/**
-	 * Devuelve el número de taquilla en el que se encuentra el paquete
-	 * indicado.
+	 * Devuelve el número de taquilla en el que se encuentra el paquete indicado
+	 * por id.
 	 * 
 	 * @param idPaquete id del paquete.
 	 * @return Número de la taquilla en la que está el paquete.
@@ -265,22 +273,25 @@ public abstract class PickingPoint {
 	}
 
 	/**
-	 * Dice si un paquete puede ser guardado en el PickingPoint o no.
+	 * Comprueba si un paquete puede ser guardado en el PickingPoint o no.
 	 * 
-	 * @throws IllegalArgumentException si el paquete es null.
 	 * @param paquete paquete a comprobar.
 	 * @return true si se puede guardar y false si no.
 	 */
 	public abstract boolean paqueteValido(Package paquete);
-	// TODO hacer si no se llena el coverage sino sudar
 
 	/**
 	 * Asigna el paquete dado a una taquilla.
 	 * 
+	 * El paquete es guardado en la primera taquilla disponible.
+	 * 
 	 * @param paquete paquete a guardar.
 	 * @throws IllegalArgumentException Si el paquete es null.
 	 * @throws IllegalStateException    Si el PickingPoint está lleno.
+	 * @throws IllegalStateException    Si el PickingPoint no está operativo.
 	 * @throws IllegalStateException    Si hay otro paquete con la misma id.
+	 * @throws IllegalArgumentException Si el paquete no se puede guardar en el
+	 *                                  PickingPoint.
 	 */
 	public void asignaPaquete(Package paquete) {
 		if (paquete == null) {
@@ -326,12 +337,12 @@ public abstract class PickingPoint {
 	}
 
 	/**
-	 * Muestra el paquete de la taquilla dada.
+	 * Devuelve el paquete en la taquilla con la id dada.
 	 * 
 	 * @param idTaquilla id de la taquilla de la que sacar el paquete.
 	 * @throws IllegalArgumentException si el número de taquilla es erróneo.
 	 * @throws IllegalStateException    si la taquilla está vacia.
-	 * @return paquete que estaba en la taquilla indicada.
+	 * @return paquete que estaba en la taquilla con la id indicada.
 	 */
 	public Package getPaquete(int idTaquilla) {
 
@@ -348,7 +359,7 @@ public abstract class PickingPoint {
 	}
 
 	/**
-	 * Borra el paquete de la taquilla dada.
+	 * Borra el paquete de la taquilla con la id dada.
 	 * 
 	 * @param idTaquilla id de la taquilla de la que sacar el paquete.
 	 * @throws IllegalArgumentException si el número de taquilla es erróneo.
@@ -380,11 +391,14 @@ public abstract class PickingPoint {
 	 * @throws IllegalArgumentException si el número de taquilla es erróneo.
 	 * @throws IllegalStateException    si la taquilla está vacia o si la fecha
 	 *                                  de entrega ha sido superada.
+	 * @throws IllegalStateException    si el paquete se intenta recoger pero su
+	 *                                  estado es 1 (recogido) o 2 (devuelto).
+	 * @throws IllegalStateException    si {@code fechaEnPlazo == False}.
 	 */
 	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada, int dia,
 			LocalTime hora) {
 		if (!getOperativo()) {
-			
+
 			throw new IllegalStateException(
 					"El PickingPoint no está operativo.");
 
@@ -393,11 +407,12 @@ public abstract class PickingPoint {
 			throw new IllegalArgumentException("La hora es nula.");
 
 		}
-		if (dia <  0 || dia > 6) {
-			throw new IllegalArgumentException("El dia de la semana esta comprendido entre 0 y 6.");
+		if (dia < 0 || dia > 6) {
+			throw new IllegalArgumentException(
+					"El dia de la semana esta comprendido entre 0 y 6.");
 
 		}
-		
+
 		if (getHorario()[dia][0].isAfter(hora)
 				|| getHorario()[dia][1].isBefore(hora)) {
 			throw new IllegalStateException(
@@ -424,6 +439,9 @@ public abstract class PickingPoint {
 	 * @param idTaquilla id de la taquilla de la que se devuelve el paquete.
 	 * @throws IllegalArgumentException si el número de taquilla es erróneo.
 	 * @throws IllegalStateException    si la taquilla está vacia.
+	 * @throws IllegalStateException    si el paquete se intenta recoger pero su
+	 *                                  estado es 1 (recogido) o 2 (devuelto).
+	 * @throws IllegalStateException    si {@code fechaEnPlazo == False}.
 	 */
 	public void devuelvePaquete(int idTaquilla) {
 		if (idTaquilla < 0 || idTaquilla > getNumeroTaquillas() - 1) {

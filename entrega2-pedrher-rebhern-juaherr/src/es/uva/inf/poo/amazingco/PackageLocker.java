@@ -32,8 +32,13 @@ public class PackageLocker extends GroupablePickingPoint {
 	}
 
 	/**
-	 * El paquete no puede ser a contrarrembolso.
+	 * Comprueba si un paquete puede ser guardado en el PackageLocker o no.
 	 * 
+	 * Un paquete es valido siempre que no sea certificado ni a contrarrembolso.
+	 * 
+	 * @param paquete paquete a comprobar.
+	 * @return true si el paquete no es certificado ni a contrarrembolso.
+	 * @throws IllegalArgumentException si el paquete es null.
 	 * @see es.uva.inf.poo.amazingco.GroupablePickingPoint#paqueteValido(Package)
 	 */
 	@Override
