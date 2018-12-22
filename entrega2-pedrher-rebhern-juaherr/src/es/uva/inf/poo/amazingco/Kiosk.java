@@ -44,7 +44,7 @@ public class Kiosk extends GroupablePickingPoint {
 	 *                                  la hora de cierre.
 	 * @throws IllegalArgumentException si el numeroTaquillas es menor que 0.
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#PickingPoint(String,
-	 *      GPSCoordinate, LocalTime[][],int, boolean)
+	 *      GPSCoordinate, LocalTime[][],int)
 	 */
 	public Kiosk(String id, GPSCoordinate ubicacion, LocalTime[][] horario,
 			int numeroTaquillas) {
@@ -93,7 +93,6 @@ public class Kiosk extends GroupablePickingPoint {
 	}
 
 	/**
-	 * 
 	 * Paga el dinero debido a AmazingCo.
 	 */
 	public void dineroAmazingCo() {
@@ -103,7 +102,7 @@ public class Kiosk extends GroupablePickingPoint {
 	/**
 	 * Incrementa/decrementa el número de taquillas dado.
 	 * 
-	 * @param modificacion modificacion a realizar.
+	 * @param modificacion modificacion de taquillas a realizar.
 	 * 
 	 * @throws IllegalArgumentException si se intentan borrar mas taquillas de
 	 *                                  las existentes, o mas taquillas de las
@@ -118,12 +117,21 @@ public class Kiosk extends GroupablePickingPoint {
 	}
 
 	/**
-	 * Modifica el estado del paquete a sacado de la taquilla dada en caso de
-	 * que esté pagado, si no lo está, lo paga y luego se cambia el estado a
-	 * sacado de la taquilla dada.
+	 * Modifica el estado del paquete a sacado.
 	 * 
+	 * Modifica el estado del paquete a sacado del paquete de la taquilla dada
+	 * en caso de que esté pagado, si no lo está, lo paga y luego se cambia el
+	 * estado a sacado de la taquilla dada.
+	 * 
+	 * @throws IllegalArgumentException si el número de taquilla es erróneo.
+	 * @throws IllegalStateException    si la taquilla está vacia o si la fecha
+	 *                                  de entrega ha sido superada.
+	 * @throws IllegalStateException    si el paquete se intenta recoger pero su
+	 *                                  estado es 1 (recogido) o 2 (devuelto).
+	 * @throws IllegalStateException    si {@code fechaEnPlazo == False}.
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#sacaPaquete(int, LocalDate,
 	 *      int, LocalTime)
+	 * @see es.uva.inf.poo.amazingco.Package#recogido(LocalDate)
 	 */
 	@Override
 	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada, int dia,

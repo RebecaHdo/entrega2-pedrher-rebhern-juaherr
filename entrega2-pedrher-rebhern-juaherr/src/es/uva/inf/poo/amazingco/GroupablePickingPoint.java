@@ -41,7 +41,7 @@ public abstract class GroupablePickingPoint extends PickingPoint {
 	 *                                  la hora de cierre.
 	 * @throws IllegalArgumentException si el numeroTaquillas es menor que 0.
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#PickingPoint(String,
-	 *      GPSCoordinate, LocalTime[][],int, boolean)
+	 *      GPSCoordinate, LocalTime[][],int)
 	 */
 	public GroupablePickingPoint(String id, GPSCoordinate ubicacion,
 			LocalTime[][] horario, int numeroTaquillas) {
@@ -77,12 +77,11 @@ public abstract class GroupablePickingPoint extends PickingPoint {
 	}
 
 	/**
-	 * Comprueba si un paquete puede ser guardado en el GroupablePickingPoint o no.
+	 * Comprueba si un paquete puede ser guardado en el GroupablePickingPoint o
+	 * no.
 	 * 
 	 * Un paquete es valido siempre que no sea certificado.
 	 * 
-	 * @param paquete paquete a comprobar.
-	 * @return true si el paquete no es certificado.
 	 * @throws IllegalArgumentException si el paquete es null.
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#paqueteValido(Package)
 	 */
@@ -99,7 +98,6 @@ public abstract class GroupablePickingPoint extends PickingPoint {
 	 * 
 	 * Es borrable si no contiene ningún paquete.
 	 * 
-	 * @return true si no contiene ningún paquete.
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#borrable()
 	 */
 	@Override

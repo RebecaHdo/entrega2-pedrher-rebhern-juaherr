@@ -372,7 +372,6 @@ public class PickingPointHub extends PickingPoint {
 	 * Asigna el paquete a su lista principal como ademas de al primer
 	 * GroupablePickingPoint donde sea posible asignarle.
 	 * 
-	 * @param paquete paquete a asignar.
 	 * @throws IllegalStateException    si se intenta asignar un paquete a
 	 *                                  contrarrembolso y no hay ningun Kiosk
 	 *                                  activo.
@@ -414,11 +413,14 @@ public class PickingPointHub extends PickingPoint {
 	}
 
 	/**
-	 * Borra el paquete, mendiante su Id, de su lista principal como ademas del
-	 * punto donde está guardado el paquete.
+	 * Borra el paquete de la taquilla dada por Id.
 	 * 
-	 * @throws IllegalArgumentException si la Id dada no pertenece a ningún
-	 *                                  paquete guardado.
+	 * Se borra de su lista principal como ademas del GroupablePickingPoint
+	 * donde está guardado el paquete.
+	 * 
+	 * @throws IllegalArgumentException si el número de taquilla es erróneo.
+	 * @throws IllegalStateException    si la taquilla está vacia.
+	 * 
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#borraPaquete(int)
 	 */
 	@Override
@@ -453,11 +455,10 @@ public class PickingPointHub extends PickingPoint {
 	 * Comprueba si un paquete puede ser guardado en el PickingPointHub o no.
 	 * 
 	 * Un paquete es valido siempre que sea válido es sus GroupablePickingPoints
-	 * guardados..
+	 * guardado..
 	 * 
-	 * @param paquete paquete a comprobar.
 	 * @return true si el paquete es valido en los GroupablePickingPoints
-	 *         guardados..
+	 *         guardados.
 	 * @throws IllegalArgumentException si el paquete es null.
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#paqueteValido(Package)
 	 */

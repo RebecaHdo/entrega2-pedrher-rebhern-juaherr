@@ -325,6 +325,10 @@ public class Package {
 	}
 
 	/**
+	 * Comprueba si el paquete dado es igual a this.
+	 * 
+	 * @return true si ambos paquetes son iguales.
+	 * 
 	 * @see java.util.Objects#equals(Object)
 	 */
 	@Override
@@ -347,6 +351,10 @@ public class Package {
 	}
 
 	/**
+	 * Pasa el paquete a formato string.
+	 * 
+	 * @return El paquete en modo String.
+	 * 
 	 * @see java.lang.String#toString()
 	 */
 	@Override

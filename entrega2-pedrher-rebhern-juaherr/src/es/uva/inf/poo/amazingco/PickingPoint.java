@@ -398,6 +398,7 @@ public abstract class PickingPoint {
 	 * @throws IllegalStateException    si el paquete se intenta recoger pero su
 	 *                                  estado es 1 (recogido) o 2 (devuelto).
 	 * @throws IllegalStateException    si {@code fechaEnPlazo == False}.
+	 * @see es.uva.inf.poo.amazingco.Package#recogido(LocalDate)
 	 */
 	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada, int dia,
 			LocalTime hora) {
@@ -446,6 +447,7 @@ public abstract class PickingPoint {
 	 * @throws IllegalStateException    si el paquete se intenta recoger pero su
 	 *                                  estado es 1 (recogido) o 2 (devuelto).
 	 * @throws IllegalStateException    si {@code fechaEnPlazo == False}.
+	 * @see es.uva.inf.poo.amazingco.Package#devuelto()
 	 */
 	public void devuelvePaquete(int idTaquilla) {
 		if (idTaquilla < 0 || idTaquilla > getNumeroTaquillas() - 1) {

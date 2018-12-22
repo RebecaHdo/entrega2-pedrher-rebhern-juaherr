@@ -27,6 +27,8 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 	private static final String NO_EN_EL_REGISTRO = "El paquete no está en el registro.";
 
 	/**
+	 * Inicializa el PostOffice con la id, ubicación, horario semanal y número
+	 * de taquillas.
 	 * 
 	 * @param id        id de la taquilla.
 	 * @param ubicacion ubicación de la taquilla.
@@ -50,6 +52,9 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 	}
 
 	/**
+	 * Inicializa el PostOffice con la id, ubicación, horario semanal, número de
+	 * taquillas y operatividad.
+	 * 
 	 * @param id        id de la taquilla.
 	 * @param ubicacion ubicación de la taquilla.
 	 * @param horario   forma en la que se representa el día de la semana y la
@@ -91,11 +96,22 @@ public class PostOffice extends PickingPoint implements IdentificationRegistry {
 	}
 
 	/**
-	 * @throws IllegalStateException si la taquilla indicada está vacia o si el
-	 *                               paquete está certificado.
+	 * Modifica el estado del paquete a sacado.
 	 * 
+	 * Modifica el estado del paquete a sacado del paquete de la taquilla dada
+	 * en caso de que esté pagado, si no lo está, lo paga y luego se cambia el
+	 * estado a sacado de la taquilla dada.
+	 * 
+	 * @throws IllegalStateException    Si el paquete está certificado.
+	 * @throws IllegalArgumentException Si el número de taquilla es erróneo.
+	 * @throws IllegalStateException    Si la taquilla está vacia o si la fecha
+	 *                                  de entrega ha sido superada.
+	 * @throws IllegalStateException    Si el paquete se intenta recoger pero su
+	 *                                  estado es 1 (recogido) o 2 (devuelto).
+	 * @throws IllegalStateException    Si {@code fechaEnPlazo == False}.
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#sacaPaquete(int, LocalDate,
 	 *      int, LocalTime)
+	 * @see es.uva.inf.poo.amazingco.Package#recogido(LocalDate)
 	 */
 	@Override
 	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada, int dia,
