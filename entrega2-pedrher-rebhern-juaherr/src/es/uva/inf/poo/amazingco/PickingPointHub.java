@@ -106,28 +106,29 @@ public class PickingPointHub extends PickingPoint {
 	}
 
 	/**
-	 * Devuelve un array con todos los PickingPoint.
+	 * Devuelve un array con todos los GroupablePickingPoints que estan
+	 * guardados en el hub.
 	 * 
-	 * @return array de todos los PickingPoint.
+	 * @return array de todos los GroupablePickingPoint.
 	 */
 	public GroupablePickingPoint[] getListaPuntos() {
 		return getListaPuntosInterna().toArray(new GroupablePickingPoint[0]);
 	}
 
 	/**
-	 * Devuelve el número de PickingPoints que hay.
+	 * Devuelve el número de GroupablePickingPoints que hay.
 	 * 
-	 * @return número de PickingPoints que hay.
+	 * @return número de GroupablePickingPoints que hay.
 	 */
 	public int getNumPuntos() {
 		return getListaPuntosInterna().size();
 	}
 
 	/**
-	 * Comprueba si un PickingPoint esta en el hub mediante su Id.
+	 * Comprueba si un GroupablePickingPoint esta en el hub mediante su Id.
 	 * 
 	 * @param idPuntoRecogida Id del PickingPoint a comprobar.
-	 * @return true si está el PickingPoint y flse si no.
+	 * @return true si está el PickingPoint y false si no.
 	 * @throws IllegalArgumentException si la id es null.
 	 */
 	public boolean estaPuntoRecogida(String idPuntoRecogida) {
@@ -147,7 +148,7 @@ public class PickingPointHub extends PickingPoint {
 	}
 
 	/**
-	 * Añade el GroupablePickingPoint pasado siempre que se pueda.
+	 * Añade el GroupablePickingPoint dado siempre que se pueda.
 	 * 
 	 * @param puntoRecogida GroupablePickingPoint a añadir.
 	 * 
@@ -193,7 +194,14 @@ public class PickingPointHub extends PickingPoint {
 	}
 
 	/**
-	 * Borra un GroupablePickingPoint mediente Id siempre que sea posible.
+	 * Borra un GroupablePickingPoint mediente Id.
+	 * 
+	 * Para que un GroupablePickingPoint sea borrable
+	 * GroupablePickingPoint.borrable() tiene que ser true.
+	 * 
+	 * @see es.uva.inf.poo.amazingco.PackageLocker#borrable()
+	 * @see es.uva.inf.poo.amazingco.Kiosk#borrable()
+	 * 
 	 * 
 	 * @param idPuntoRecogida Id del punto a borrar.
 	 * 
@@ -245,7 +253,10 @@ public class PickingPointHub extends PickingPoint {
 	}
 
 	/**
-	 * Actualiza el numero de taquillas antes de devolverlo.
+	 * Devuelve el numero de taquillas totales.
+	 * 
+	 * Actualiza el numero de taquillas antes de devolverlo, suma todas las
+	 * taquillas que tienen los GroupablesPickingPoint internos.
 	 * 
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#getNumeroTaquillas()
 	 */
@@ -256,7 +267,11 @@ public class PickingPointHub extends PickingPoint {
 	}
 
 	/**
-	 * Actualiza la operatividad del Hub antes de devolverlo.
+	 * Devuelve la operatividad del hub.
+	 * 
+	 * Actualiza la operatividad del Hub antes de devolverlo, comprueba si hay
+	 * algún GroupablePickingPoint activo dentro si no el Hub se pone en fuera
+	 * de servicio.
 	 * 
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#getOperativo()
 	 */
@@ -267,6 +282,8 @@ public class PickingPointHub extends PickingPoint {
 	}
 
 	/**
+	 * Devuelve todos los paquetes del Hub.
+	 * 
 	 * Une el getPaquetes() de todos los puntos en el Hub.
 	 * 
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#getPaquetes()
@@ -316,6 +333,8 @@ public class PickingPointHub extends PickingPoint {
 	}
 
 	/**
+	 * Cambia el estado de su operatividad.
+	 * 
 	 * Cambia el estado de todos los puntos internos a no operativo si el Hub se
 	 * pasa a no operativo, solo puede ser puesto en operativo de nuevo si uno
 	 * de los puntos internos está operativo.
@@ -348,12 +367,21 @@ public class PickingPointHub extends PickingPoint {
 	}
 
 	/**
-	 * Asigna el paquete a su lista principal como ademas de a un punto
-	 * apropiado.
+	 * Asigna el paquete al hub.
 	 * 
-	 * @throws IllegalStateException si se intenta asignar un paquete a
-	 *                               contrarrembolso y no hay ningun Kiosk
-	 *                               activo.
+	 * Asigna el paquete a su lista principal como ademas de al primer
+	 * GroupablePickingPoint donde sea posible asignarle.
+	 * 
+	 * @param paquete paquete a asignar.
+	 * @throws IllegalStateException    si se intenta asignar un paquete a
+	 *                                  contrarrembolso y no hay ningun Kiosk
+	 *                                  activo.
+	 * @throws IllegalArgumentException Si el paquete es null.
+	 * @throws IllegalStateException    Si el PickingPoint está lleno.
+	 * @throws IllegalStateException    Si el PickingPoint no está operativo.
+	 * @throws IllegalStateException    Si hay otro paquete con la misma id.
+	 * @throws IllegalArgumentException Si el paquete no se puede guardar en el
+	 *                                  PickingPoint.
 	 * @see es.uva.inf.poo.amazingco.PickingPoint#asignaPaquete(Package)
 	 */
 	@Override

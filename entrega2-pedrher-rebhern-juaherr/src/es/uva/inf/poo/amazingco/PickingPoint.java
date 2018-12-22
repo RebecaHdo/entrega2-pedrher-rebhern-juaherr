@@ -8,7 +8,10 @@ import java.util.Collections;
 import es.uva.inf.poo.maps.GPSCoordinate;
 
 /**
- * Es un PickingPoint.
+ * Punto de recogida de paquetes donde se administra su asignación y extración.
+ * 
+ * Tiene una id como tambien la ubicación, horario de apertura y cierre semanal
+ * y su estado de operatividad (operativo o fuera de servicio).
  * 
  * @author juaherr
  * @author rebhern
@@ -110,6 +113,7 @@ public abstract class PickingPoint {
 	 *                                  que un dia no tenga exactamente 2 horas
 	 *                                  o que la hora de apertura sea mayor que
 	 *                                  la hora de cierre.
+	 * @throws IllegalArgumentException si el numeroTaquillas es menor que 0.
 	 */
 	public PickingPoint(String id, GPSCoordinate ubicacion,
 			LocalTime[][] horario, int numeroTaquillas) {
