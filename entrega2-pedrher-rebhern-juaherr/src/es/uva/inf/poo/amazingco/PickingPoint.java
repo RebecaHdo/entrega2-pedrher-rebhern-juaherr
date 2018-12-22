@@ -384,6 +384,7 @@ public abstract class PickingPoint {
 	public void sacaPaquete(int idTaquilla, LocalDate fechaSacada, int dia,
 			LocalTime hora) {
 		if (!getOperativo()) {
+			
 			throw new IllegalStateException(
 					"El PickingPoint no está operativo.");
 

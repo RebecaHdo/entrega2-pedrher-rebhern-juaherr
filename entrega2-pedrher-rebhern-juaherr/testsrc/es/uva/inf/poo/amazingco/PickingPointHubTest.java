@@ -935,7 +935,7 @@ public class PickingPointHubTest {
 	}
 
 	@Test(expected = IllegalStateException.class)
-	public void testSacaPaqueteHubCerradoDespuesDeAbrir() {
+	public void testSacaPaqueteHubCerradoDespuesDeCerrar() {
 		LocalTime[][] horario = { { LocalTime.of(8, 0), LocalTime.of(14, 0) },
 				{ LocalTime.of(7, 15), LocalTime.of(20, 20) },
 				{ LocalTime.of(9, 30), LocalTime.of(21, 10) },
