@@ -15,7 +15,7 @@ import es.uva.inf.poo.maps.GPSCoordinate;
  * 
  * @author juaherr
  * @author rebhern
- * @author pedro
+ * @author pedrher
  *
  */
 public abstract class PickingPoint {
